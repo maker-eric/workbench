@@ -1,11 +1,36 @@
 ---
-import Welcome from "../components/Welcome.astro";
 import Layout from "../layouts/Layout.astro";
-
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
+import Pegboard from "../components/Pegboard.astro";
+import Hook from "../components/Hook.astro";
+import Card from "../components/Card.astro";
+import Tool from "../components/Tool.astro";
 ---
 
-<Layout>
-  <Welcome />
+<Layout title="My Workshop OS">
+  <Pegboard>
+    <!-- 挂一个内容卡片 -->
+    <Hook x={2} y={2} cols={6} rows={4}>
+      <Card title="PROJECT_ALPHA_LOG">
+        <p>今日进度：完成基础架构拆解。</p>
+        <p>状态：待优化样式细节。</p>
+      </Card>
+    </Hook>
+
+    <!-- 挂一个工具组件 (比如一个时钟或状态指示器) -->
+    <Hook x={9} y={2} cols={3} rows={3}>
+      <Tool label="OS_MONITOR">
+        <span>88%</span>
+      </Tool>
+    </Hook>
+
+    <!-- 挂另一个工具组件 -->
+    <Hook x={13} y={3} cols={2} rows={2}>
+      <Tool label="POWER">
+        <div style="width:20px; height:20px; background:red; border-radius:50%">
+        </div>
+      </Tool>
+    </Hook>
+
+    <!-- 更多组件... -->
+  </Pegboard>
 </Layout>

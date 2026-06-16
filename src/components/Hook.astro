@@ -1,0 +1,43 @@
+---
+interface Props {
+  x: number; /* 起始列坐标 */
+  y: number; /* 起始行坐标 */
+  cols?: number; /* 占用几列 */
+  rows?: number; /* 占用几行 */
+}
+
+const { x, y, cols = 4, rows = 3 } = Astro.props;
+
+// 计算 Grid 样式
+const hookStyle = {
+  gridColumn: `${x} / span ${cols}`,
+  gridRow: `${y} / span ${rows}`,
+};
+---
+
+<style>
+  .hook {
+    position: relative;
+    padding: 8px; /* 给内部组件留出一点缝隙露出底板 */
+    display: flex;
+  }
+
+  .peg-pin {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 12px;
+    height: 12px;
+    background: radial-gradient(circle at 30% 30%, #666, #111);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 20;
+    box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+  }
+</style>
+<!-- 这张卡片会自动对齐到网格 -->
+<div class="hook" style={hookStyle}>
+  <div class="peg-pin"></div>
+  <!-- 模拟固定钉子 -->
+  <slot />
+</div>

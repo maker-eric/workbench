@@ -1,0 +1,33 @@
+---
+
+---
+
+<style>
+  .pegboard {
+    display: grid;
+    /* 自动填充列，宽度等于步进值 */
+    grid-template-columns: repeat(auto-fill, var(--gap));
+    grid-auto-rows: var(--gap);
+
+    width: 100%;
+    max-width: 1200px;
+    min-height: 80vh;
+
+    background-image: radial-gradient(
+      circle var(--hole-size) at center,
+      var(--hole-color) 100%,
+      transparent 100%
+    );
+    background-size: var(--gap) var(--gap);
+    background-color: var(--board-bg);
+
+    border: 2px solid #333;
+    box-shadow: 10px 10px 0px #1a1a1a;
+    padding: calc(var(--gap) / 2);
+    position: relative;
+  }
+</style>
+
+<div class="pegboard">
+  <slot />
+</div>
