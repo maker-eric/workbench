@@ -15,9 +15,14 @@ const hookStyle = {
 };
 ---
 
+<div class="hook" style={hookStyle}>
+  <div class="peg-pin"></div>
+  <!-- 模拟固定钉子 -->
+  <slot />
+</div>
+
 <style>
   .hook {
-    position: relative;
     transform: translate(-50%, -6px);
     display: flex;
     position: relative;
@@ -38,9 +43,3 @@ const hookStyle = {
     box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
   }
 </style>
-<!-- 这张卡片会自动对齐到网格 -->
-<div class="hook" style={hookStyle}>
-  <div class="peg-pin"></div>
-  <!-- 模拟固定钉子 -->
-  <slot />
-</div>
