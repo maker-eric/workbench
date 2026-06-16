@@ -1,20 +1,36 @@
 ---
+import { getCollection } from "astro:content";
 import Layout from "../layouts/Layout.astro";
 import Pegboard from "../components/Pegboard.astro";
 import Hook from "../components/Hook.astro";
 import Card from "../components/Card.astro";
 import Tool from "../components/Tool.astro";
+
+const allPosts = await getCollection("posts");
 ---
 
 <Layout title="My Workshop OS">
   <Pegboard>
-    <!-- 挂一个内容卡片 -->
-    <Hook x={5} y={2} cols={6} rows={4}>
-      <Card title="PROJECT_ALPHA_LOG">
-        <p>今日进度：完成基础架构拆解。</p>
-        <p>状态：待优化样式细节。</p>
-      </Card>
-    </Hook>
+    {
+      allPosts.map((post) => (
+        <Hook
+          x={post.data.x}
+          y={post.data.y}
+          cols={post.data.cols}
+          rows={post.data.rows}
+        >
+          <Card title={post.data.title} transition:name={post.id}>
+          <div class="post-preview">
+            {/* Astro 5 中 post.body 已被弃用，建议使用简短摘要或摘要渲染 */}
+            {/* 暂时可以使用 post.data 中的新字段或直接显示 */}
+            点击详情查看完整记录...
+          </div>
+          <!-- 注意：这里建议使用 post.id 而不是 post.slug -->
+          <a href={`/posts/${post.id}`} class="read-more">DETAILS >></a>
+        </Card>
+        </Hook>
+      ))
+    }    
 
     <!-- 挂一个工具组件 (比如一个时钟或状态指示器) -->
     <Hook x={11} y={2} cols={3} rows={3}>
@@ -34,3 +50,23 @@ import Tool from "../components/Tool.astro";
     <!-- 更多组件... -->
   </Pegboard>
 </Layout>
+
+<style>
+  .post-preview {
+    font-size: 0.85rem;
+    line-height: 1.5;
+    margin-bottom: 10px;
+    color: #444;
+  }
+  .read-more {
+    font-size: 0.7rem;
+    color: var(--accent);
+    text-decoration: none;
+    font-weight: bold;
+    display: block;
+    margin-top: auto;
+  }
+  .read-more:hover {
+    text-decoration: underline;
+  }
+</style>

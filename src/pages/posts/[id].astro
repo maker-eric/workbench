@@ -1,0 +1,27 @@
+---
+// src/pages/posts/[id].astro
+import { getCollection, render } from "astro:content";
+import Layout from "../../layouts/Layout.astro";
+
+export async function getStaticPaths() {
+  const posts = await getCollection("posts");
+  return posts.map((post) => ({
+    params: { id: post.id }, // 使用 id
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props;
+// 使用 render() 函数渲染内容
+const { Content } = await render(post);
+---
+
+<Layout title={post.data.title}>
+  <div class="detail-container" transition:name={post.id}>
+    <h1>{post.data.title}</h1>
+    <article>
+      <Content />
+    </article>
+    <a href="/">BACK TO BOARD</a>
+  </div>
+</Layout>
