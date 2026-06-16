@@ -21,8 +21,8 @@ const { title } = Astro.props;
     flex-direction: column;
     overflow: hidden;
 
-    background: rgba(255, 255, 255, 0.25); /* 白色半透明，0~1可调透明度 */
-    backdrop-filter: blur(10px); /* 背景模糊，数值越大越磨砂 */
+    /*background: rgba(255, 255, 255, 0.25); /* 白色半透明，0~1可调透明度 */
+    backdrop-filter: blur(5px); /* 背景模糊，数值越大越磨砂 */
 
     border: 1px solid rgba(255, 255, 255, 0.4);
     border-radius: 12px; /* 圆角是亚克力灵魂，不加很难有质感 */
@@ -43,6 +43,7 @@ const { title } = Astro.props;
     padding: 10px;
     font-size: 14px;
     color: #333;
+    background: rgba(255, 255, 255);
     overflow: hidden;
   }
 </style>
