@@ -1,4 +1,5 @@
 ---
+// src/components/Card.astro
 interface Props {
   title: string;
   id?: string; // 增加一个可选的 id，用于 View Transition
@@ -42,11 +43,12 @@ const { title, id } = Astro.props;
   }
   .content {
     flex: 1;
+    display: flex;
+    min-height: 0;
     padding: 20px;
+    flex-direction: column;
     font-size: 14px;
     color: #333;
     background: rgba(255, 255, 255);
-    flex: 1; /* 让内容区域撑开 */
-    overflow: hidden;
   }
 </style>
