@@ -7,7 +7,7 @@ import Card from "../../components/Card.astro";
 export async function getStaticPaths() {
   const posts = await getCollection("posts");
   return posts.map((post) => ({
-    params: { id: post.id }, // 使用 id
+    params: { id: post.id },
     props: { post },
   }));
 }
@@ -18,46 +18,35 @@ const { Content } = await render(post);
 ---
 
 <Layout title={post.data.title}>
-  <div class="detail-wrapper">
-    <!-- 1. 复用 Card 组件 -->
-    <!-- 2. 传入相同的 id，让 View Transitions 知道它是从刚才那个小卡片变过来的 -->
-    <div class="giant-card-container">
-      <Card title={post.data.title} id={post.id}>
-        <article class="prose">
-          <Content />
-        </article>
+  <!-- 1. 复用 Card 组件 -->
+  <!-- 2. 传入相同的 id，让 View Transitions 知道它是从刚才那个小卡片变过来的 -->
+  <div class="giant-card-container">
+    <Card title={post.data.title} id={post.id}>
+      <article class="prose">
+        <Content />
+      </article>
 
-        <div class="footer-actions">
-          <a href="/">← BACK TO BOARD</a>
-        </div>
-      </Card>
-    </div>
+      <div class="footer-actions">
+        <a href="/">← BACK TO BOARD</a>
+      </div>
+    </Card>
   </div>
 </Layout>
 
 <style>
-  .detail-wrapper {
-    width: 100vw;
-    height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background: #222; /* 这里可以沿用你工作台的背景色 */
-    padding: 40px;
-    box-sizing: border-box;
-  }
-
   .giant-card-container {
     /* 控制放大后卡片的大小 */
     width: 100%;
-    max-width: 800px;
-    height: 80vh;
+    max-width: 1200px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
   }
 
   .footer-actions {
-    margin-top: 20px;
-    padding-top: 10px;
-    border-top: 1px dashed #ccc;
+    margin-top: auto;
+    padding-top: 20px;
+    border-top: 1px dashed rgba(0, 0, 0, 0.1);
   }
 
   .footer-actions a {
@@ -65,10 +54,17 @@ const { Content } = await render(post);
     text-decoration: none;
     font-size: 12px;
     font-weight: bold;
+    display: inline-block;
+    padding: 5px 10px;
+    border: 1px solid var(--accent);
+    border-radius: 4px;
   }
 
   /* 针对文章内容的样式微调 */
   .prose {
     line-height: 1.6;
+    flex: 1;
+    overflow-y: auto;
+    padding-right: 10px; /* 给滚动条留点空间 */
   }
 </style>

@@ -65,6 +65,15 @@ import { ClientRouter } from "astro:transitions";
     font-family: "JetBrains Mono", "Courier New", monospace;
   }
 
+  .pegboard-container {
+    display: flex;
+    flex-direction: column;
+    /* 确保容器占满全屏，这样内部的 flex 才能生效 */
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+  }
+
   /* 顶部工业感 Header */
   .industrial-header {
     background: #333;
@@ -95,10 +104,14 @@ import { ClientRouter } from "astro:transitions";
   }
 
   .workbench {
+    flex: 1;
     padding: 20px;
     display: flex;
     justify-content: center;
-    align-items: flex-start;
+    /* 修改点：align-items 从 flex-start 改为 stretch */
+    /* 这样子元素（Pegboard 或 giant-card-container）默认高度会撑满 workbench */
+    align-items: stretch;
+    overflow: hidden;
   }
 
   .industrial-footer {
