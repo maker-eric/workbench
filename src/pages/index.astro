@@ -6,6 +6,7 @@ import Card from "../components/Card.astro";
 import Tool from "../components/Tool.astro";
 import pidTuner from "../assets/pid-tuner.svg";
 import arthorizon from "../assets/artificial-horizon.svg";
+import caliper from "../assets/caliper.png";
 const allPosts = await getCollection("posts");
 ---
 
@@ -54,6 +55,16 @@ const allPosts = await getCollection("posts");
       </Tool>
     </Hook>
     
+    <Hook x={20} y={3} cols={3} rows={6}>
+      <Tool label="PRECISION_MEASURE">
+        <img 
+          src={caliper.src} 
+          alt="Caliper" 
+          class="widget-svg"
+        />
+      </Tool>
+    </Hook>
+
 </Layout>
 
 <style>
