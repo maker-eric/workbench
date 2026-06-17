@@ -47,7 +47,7 @@ const { Content } = await render(post);
     max-width: 1200px;
     display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: stretch;
     flex-direction: column;
   }
 
@@ -73,6 +73,7 @@ const { Content } = await render(post);
     max-width: 1000px;
     height: 100%; /* 撑满 detail-hook */
     display: flex;
+    flex-direction: column;
   }
 
   /* 针对文章内容的样式微调 */
