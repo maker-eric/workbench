@@ -20,7 +20,7 @@ const { Content } = await render(post);
 <Layout title={post.data.title}>
   <!-- 1. 复用 Card 组件 -->
   <!-- 2. 传入相同的 id，让 View Transitions 知道它是从刚才那个小卡片变过来的 -->
-  <div class="giant-card-container">
+  <div class="detail-hook">
     <Card title={post.data.title} id={post.id}>
       <article class="prose">
         <Content />
@@ -34,7 +34,7 @@ const { Content } = await render(post);
 </Layout>
 
 <style>
-  .giant-card-container {
+  .detail-hook {
     /* 控制放大后卡片的大小 */
     width: 100%;
     max-width: 1200px;

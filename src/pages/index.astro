@@ -1,7 +1,6 @@
 ---
 import { getCollection } from "astro:content";
 import Layout from "../layouts/Layout.astro";
-import Pegboard from "../components/Pegboard.astro";
 import Hook from "../components/Hook.astro";
 import Card from "../components/Card.astro";
 import Tool from "../components/Tool.astro";
@@ -9,8 +8,7 @@ import Tool from "../components/Tool.astro";
 const allPosts = await getCollection("posts");
 ---
 
-<Layout title="My Workshop OS">
-  <Pegboard>
+<Layout title="My Workshop OS">  
     {
       allPosts.map((post) => (
         <Hook
@@ -47,9 +45,7 @@ const allPosts = await getCollection("posts");
         </div>
       </Tool>
     </Hook>
-
-    <!-- 更多组件... -->
-  </Pegboard>
+    
 </Layout>
 
 <style>

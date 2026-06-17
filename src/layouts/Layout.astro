@@ -4,6 +4,7 @@ interface Props {
 }
 const { title = "Maker's Pegboard" } = Astro.props;
 import { ClientRouter } from "astro:transitions";
+import Pegboard from "../components/Pegboard.astro";
 ---
 
 <!doctype html>
@@ -29,7 +30,9 @@ import { ClientRouter } from "astro:transitions";
       </header>
 
       <main class="workbench">
-        <slot />
+        <Pegboard>
+          <slot />
+        </Pegboard>
       </main>
 
       <footer class="industrial-footer">
