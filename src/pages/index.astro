@@ -5,6 +5,7 @@ import Hook from "../components/Hook.astro";
 import Card from "../components/Card.astro";
 import Tool from "../components/Tool.astro";
 import pidTuner from "../assets/pid-tuner.svg";
+import arthorizon from "../assets/artificial-horizon.svg";
 const allPosts = await getCollection("posts");
 ---
 
@@ -43,10 +44,13 @@ const allPosts = await getCollection("posts");
     </Hook>
 
     <!-- 挂另一个工具组件 -->
-    <Hook x={14} y={3} cols={2} rows={2}>
-      <Tool label="POWER">
-        <div style="width:20px; height:20px; background:red; border-radius:50%">
-        </div>
+    <Hook x={14} y={3} cols={5} rows={5}>
+      <Tool label="ATTITUDE_INDICATOR">
+        <img 
+          src={arthorizon.src} 
+          alt="Artificial Horizon" 
+          class="widget-svg"
+        />
       </Tool>
     </Hook>
     

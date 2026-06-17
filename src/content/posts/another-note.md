@@ -2,7 +2,7 @@
 title: "SIDE_TASK_01"
 date: 2023-10-28
 x: 12
-y: 6
+y: 10
 cols: 4
 rows: 3
 ---
