@@ -1,0 +1,63 @@
+<svg width="640" height="340" viewBox="0 0 640 340" xmlns="http://www.w3.org/2000/svg">
+  <style>
+    .grid { stroke:#ffffff; stroke-width:1.0; }
+    .axis { stroke:#1e293b; stroke-width:1.3; }
+    .setpoint { stroke:#ef4444; stroke-width:2; stroke-dasharray:7 5; }
+    .wave-osc { stroke:#2563eb; stroke-width:3.4; fill:none; }
+    .wave-good { stroke:#059669; stroke-width:3.4; fill:none; }
+    text { font-family: 'JetBrains Mono', monospace; font-size:12; fill:#1e293b; }
+    
+    @keyframes draw {
+      0% { stroke-dashoffset: 1; }
+      70% { stroke-dashoffset: 0; }  /* 70%的时间画完，留30%时间观察结果 */
+      100% { stroke-dashoffset: 0; }
+    }
+    
+    .animate-sync {
+      /* 这里的 1 代表整条路径的长度，不管它多弯 */
+      stroke-dasharray: 1;
+      stroke-dashoffset: 1;
+      animation: draw 5s linear infinite;
+    }
+  </style>
+
+  <!-- 背景网格 -->
+  <g class="grid">
+    <line x1="40" y1="90" x2="600" y2="90"/>
+    <line x1="40" y1="150" x2="600" y2="150"/>
+    <line x1="40" y1="210" x2="600" y2="210"/>
+    <line x1="160" y1="30" x2="160" y2="300"/>
+    <line x1="280" y1="30" x2="280" y2="300"/>
+    <line x1="400" y1="30" x2="400" y2="300"/>
+    <line x1="520" y1="30" x2="520" y2="300"/>
+  </g>
+
+  <!-- 坐标轴 -->
+  <line class="axis" x1="40" y1="30" x2="40" y2="300"/>
+  <line class="axis" x1="40" y1="300" x2="600" y2="300"/>
+  <text x="20" y="36">1.6</text><text x="20" y="150">0.8</text><text x="24" y="308">0</text>
+  <text x="610" y="305">t</text>
+
+  <!-- 目标值 -->
+  <line class="setpoint" x1="40" y1="150" x2="600" y2="150"/>
+  <text x="530" y="140" fill="#ef4444">SETPOINT</text>
+
+  <!-- 蓝色线：通过 pathLength="1" 强制同步 -->
+  <path class="wave-osc animate-sync" 
+        pathLength="1" 
+        d="M40,300 Q90,230 140,120 T240,185 T330,145 T420,168 T510,158 T600,150" />
+  
+  <!-- 绿色线：通过 pathLength="1" 强制同步 -->
+  <path class="wave-good animate-sync" 
+        pathLength="1" 
+        d="M40,300 Q130,165 210,150 L600,150" />
+
+  <!-- 图例 -->
+  <g transform="translate(430, 35)">
+    <rect width="180" height="55" fill="white" fill-opacity="0.9" stroke="#cbd5e1" rx="4"/>
+    <line x1="10" y1="18" x2="40" y2="18" class="wave-osc"/>
+    <text x="48" y="22">Oscillation</text>
+    <line x1="10" y1="38" x2="40" y2="38" class="wave-good"/>
+    <text x="48" y="42">Stable PID</text>
+  </g>
+</svg>

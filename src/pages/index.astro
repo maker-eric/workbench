@@ -4,7 +4,7 @@ import Layout from "../layouts/Layout.astro";
 import Hook from "../components/Hook.astro";
 import Card from "../components/Card.astro";
 import Tool from "../components/Tool.astro";
-
+import pidTuner from "../assets/pid-tuner.svg";
 const allPosts = await getCollection("posts");
 ---
 
@@ -32,9 +32,13 @@ const allPosts = await getCollection("posts");
     }    
 
     <!-- 挂一个工具组件 (比如一个时钟或状态指示器) -->
-    <Hook x={11} y={2} cols={3} rows={3}>
-      <Tool label="OS_MONITOR">
-        <span>88%</span>
+    <Hook x={5} y={8} cols={8} rows={5}>
+      <Tool label="STABILITY_OSCILLOSCOPE">
+        <img 
+          src={pidTuner.src} 
+          alt="PID Tuner" 
+          class="widget-svg"
+        />
       </Tool>
     </Hook>
 
@@ -65,5 +69,16 @@ const allPosts = await getCollection("posts");
   }
   .read-more:hover {
     text-decoration: underline;
+  }
+  .widget-svg {
+    /* 核心属性：撑满父容器但保持比例 */
+    width: 100%;
+    height: 100%;
+    
+    /* 关键属性：像背景图一样缩放，确保内容全部显示且不变形 */
+    object-fit: contain; 
+    
+    /* 增加一点点内边距，不让波形图贴死边框 */
+    padding: 10px; 
   }
 </style>
