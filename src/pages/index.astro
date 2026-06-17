@@ -19,15 +19,16 @@ const allPosts = await getCollection("posts");
           cols={post.data.cols}
           rows={post.data.rows}
         >
-          <Card title={post.data.title} transition:name={post.id}>
-          <div class="post-preview">
-            {/* Astro 5 中 post.body 已被弃用，建议使用简短摘要或摘要渲染 */}
-            {/* 暂时可以使用 post.data 中的新字段或直接显示 */}
-            点击详情查看完整记录...
-          </div>
-          <!-- 注意：这里建议使用 post.id 而不是 post.slug -->
-          <a href={`/posts/${post.id}`} class="read-more">DETAILS >></a>
-        </Card>
+          
+            <Card title={post.data.title} id={post.id}>
+              <div class="post-preview">
+                {/* Astro 5 中 post.body 已被弃用，建议使用简短摘要或摘要渲染 */}
+                {/* 暂时可以使用 post.data 中的新字段或直接显示 */}
+                abc...
+              </div>            
+              <a href={`/posts/${post.id}`} class="read-more">DETAILS >></a>
+            </Card>
+          
         </Hook>
       ))
     }    
