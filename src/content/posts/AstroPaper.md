@@ -3,8 +3,8 @@ title: "PROJECT_ALPHA_LOG"
 date: 2023-10-27
 x: 5
 y: 2
-cols: 6
-rows: 4
+cols: 8
+rows: 6
 ---
 
 # AstroPaper 📄

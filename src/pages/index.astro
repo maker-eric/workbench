@@ -7,6 +7,7 @@ import Tool from "../components/Tool.astro";
 import pidTuner from "../assets/pid-tuner.svg";
 import arthorizon from "../assets/artificial-horizon.svg";
 import caliper from "../assets/caliper.png";
+import calculator from "../assets/calculator.svg";
 const allPosts = await getCollection("posts");
 ---
 
@@ -34,7 +35,7 @@ const allPosts = await getCollection("posts");
     }    
 
     <!-- 挂一个工具组件 (比如一个时钟或状态指示器) -->
-    <Hook x={5} y={8} cols={8} rows={5}>
+    <Hook x={5} y={10} cols={6} rows={3}>
       <Tool label="STABILITY_OSCILLOSCOPE">
         <img 
           src={pidTuner.src} 
@@ -45,7 +46,7 @@ const allPosts = await getCollection("posts");
     </Hook>
 
     <!-- 挂另一个工具组件 -->
-    <Hook x={14} y={3} cols={5} rows={5}>
+    <Hook x={14} y={3} cols={3} rows={3}>
       <Tool label="ATTITUDE_INDICATOR">
         <img 
           src={arthorizon.src} 
@@ -60,6 +61,16 @@ const allPosts = await getCollection("posts");
         <img 
           src={caliper.src} 
           alt="Caliper" 
+          class="widget-svg"
+        />
+      </Tool>
+    </Hook>
+
+    <Hook x={17} y={3} cols={3} rows={4}>
+      <Tool label="CALCULATOR">
+        <img 
+          src={calculator.src} 
+          alt="Calculator" 
           class="widget-svg"
         />
       </Tool>
