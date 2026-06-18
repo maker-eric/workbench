@@ -1,80 +1,71 @@
 ---
+// src/pages/index.astro
 import { getCollection } from "astro:content";
 import Layout from "../layouts/Layout.astro";
 import Hook from "../components/Hook.astro";
 import Card from "../components/Card.astro";
 import Tool from "../components/Tool.astro";
+
+
 import pidTuner from "../assets/pid-tuner.svg";
 import arthorizon from "../assets/artificial-horizon.svg";
 import caliper from "../assets/caliper.png";
 import calculator from "../assets/calculator.svg";
+
+const WIDGET_MAP = {
+  pid: { src: pidTuner.src, alt: "PID Tuner" },
+  attitude: { src: arthorizon.src, alt: "Artificial Horizon" },
+  caliper: { src: caliper.src, alt: "Caliper" },
+  calculator: { src: calculator.src, alt: "Calculator" },
+};
+
 const allPosts = await getCollection("posts");
+const allTools = await getCollection("tools");
 ---
 
 <Layout title="My Workshop OS">  
-    {
-      allPosts.map((post) => (
-        <Hook
-          x={post.data.x}
-          y={post.data.y}
-          cols={post.data.cols}
-          rows={post.data.rows}
-        >
-          
-            <Card title={post.data.title} id={post.id}>
-              <div class="post-preview">
-                {/* Astro 5 中 post.body 已被弃用，建议使用简短摘要或摘要渲染 */}
-                {/* 暂时可以使用 post.data 中的新字段或直接显示 */}
-                abc...
-              </div>            
-              <a href={`/posts/${post.id}`} class="read-more">DETAILS >></a>
-            </Card>
-          
-        </Hook>
-      ))
-    }    
+  <!-- 渲染所有卡片 (Posts) -->
+  {
+    allPosts.map((post) => (
+      <Hook
+        x={post.data.x}
+        y={post.data.y}
+        cols={post.data.cols}
+        rows={post.data.rows}
+      >
+        
+          <Card title={post.data.title} id={post.id}>
+            <div class="post-preview">
+              {/* Astro 5 中 post.body 已被弃用，建议使用简短摘要或摘要渲染 */}
+              {/* 暂时可以使用 post.data 中的新字段或直接显示 */}
+              abc...
+            </div>            
+            <a href={`/posts/${post.id}`} class="read-more">DETAILS >></a>
+          </Card>
+        
+      </Hook>
+    ))
+  }    
 
-    <!-- 挂一个工具组件 (比如一个时钟或状态指示器) -->
-    <Hook x={5} y={10} cols={6} rows={3}>
-      <Tool label="STABILITY_OSCILLOSCOPE">
-        <img 
-          src={pidTuner.src} 
-          alt="PID Tuner" 
-          class="widget-svg"
-        />
-      </Tool>
-    </Hook>
-
-    <!-- 挂另一个工具组件 -->
-    <Hook x={14} y={3} cols={3} rows={3}>
-      <Tool label="ATTITUDE_INDICATOR">
-        <img 
-          src={arthorizon.src} 
-          alt="Artificial Horizon" 
-          class="widget-svg"
-        />
-      </Tool>
-    </Hook>
+  <!-- 渲染所有工具 (Tools) -->
+  {allTools.map((tool) => {
+    // 根据数据中的 widgetType 获取对应的图片素材
+    const widgetAsset = WIDGET_MAP[tool.data.widgetType];
     
-    <Hook x={20} y={3} cols={3} rows={6}>
-      <Tool label="PRECISION_MEASURE">
-        <img 
-          src={caliper.src} 
-          alt="Caliper" 
-          class="widget-svg"
-        />
-      </Tool>
-    </Hook>
-
-    <Hook x={17} y={3} cols={3} rows={4}>
-      <Tool label="CALCULATOR">
-        <img 
-          src={calculator.src} 
-          alt="Calculator" 
-          class="widget-svg"
-        />
-      </Tool>
-    </Hook>
+    return (
+      <Hook x={tool.data.x} y={tool.data.y} cols={tool.data.cols} rows={tool.data.rows}>
+        <Tool label={tool.data.label}>
+          {widgetAsset && (
+            <img 
+              src={widgetAsset.src} 
+              alt={widgetAsset.alt} 
+              class="widget-svg" 
+            />
+          )}
+        </Tool>
+      </Hook>
+    );
+  })}
 
 </Layout>
 

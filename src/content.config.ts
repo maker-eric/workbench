@@ -13,6 +13,19 @@ const postsCollection = defineCollection({
   }),
 });
 
+const toolsCollection = defineCollection({
+  loader: glob({ pattern: "**/[^_]*.md", base: "./src/content/tools" }),
+  schema: z.object({
+    label: z.string(),
+    widgetType: z.enum(["pid", "attitude", "caliper", "calculator"]), // 预定义工具类型
+    x: z.number(),
+    y: z.number(),
+    cols: z.number().default(3),
+    rows: z.number().default(3),
+  }),
+});
+
 export const collections = {
   'posts': postsCollection,
+  'tools': toolsCollection, 
 };
