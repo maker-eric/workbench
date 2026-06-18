@@ -9,6 +9,7 @@ const postsCollection = defineCollection({
     y: z.number(),
     cols: z.number().default(6),
     rows: z.number().default(4),
+    excerpt: z.string().optional(),
     date: z.coerce.date(), // 使用 z.coerce.date() 自动处理字符串转日期
   }),
 });

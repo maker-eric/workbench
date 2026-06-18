@@ -5,6 +5,7 @@ x: 5
 y: 2
 cols: 8
 rows: 6
+excerpt: Astro11内容集合获取文章摘要完整实操指南
 ---
 
 # AstroPaper 📄

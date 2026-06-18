@@ -38,7 +38,7 @@ const allTools = await getCollection("tools");
             <div class="post-preview">
               {/* Astro 5 中 post.body 已被弃用，建议使用简短摘要或摘要渲染 */}
               {/* 暂时可以使用 post.data 中的新字段或直接显示 */}
-              abc...
+              {post.data.excerpt || "No preview available."}
             </div>            
             <a href={`/posts/${post.id}`} class="read-more">DETAILS >></a>
           </Card>
