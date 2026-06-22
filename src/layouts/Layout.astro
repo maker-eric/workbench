@@ -145,7 +145,8 @@ import Pegboard from "../components/Pegboard.astro";
     /* 修改点：align-items 从 flex-start 改为 stretch */
     /* 这样子元素（Pegboard 或 giant-card-container）默认高度会撑满 workbench */
     align-items: stretch;
-    overflow: hidden;
+    overflow-y: auto;
+    overflow-x: hidden;
   }
 
   .industrial-footer {
@@ -197,16 +198,6 @@ import Pegboard from "../components/Pegboard.astro";
       height: 100vh;
       width: 100vw;
       border: none;
-    }
-    .workbench {
-      flex: 1;
-      padding: 20px;
-      display: flex;
-      justify-content: center;
-      /* 关键 5：允许容器随 Pegboard 的长度自动延伸并产生滚动条 */
-      align-items: flex-start;
-      overflow-y: auto;
-      overflow-x: hidden;
     }
   }
 </style>
