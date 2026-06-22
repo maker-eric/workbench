@@ -35,12 +35,16 @@ const { title, id } = Astro.props;
   }
   header {
     margin-top: 16px;
-    background: var(--label-bg);
-    color: var(--accent);
-    padding: 4px 8px;
+    background: var(--accent);
+    color: var(--tag);
+    /* color: var(--accent); */
+    padding: 4px 10px;
     font-size: 12px;
     font-weight: bold;
+    justify-content: space-between;
+    box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
   }
+
   .content {
     flex: 1;
     display: flex;

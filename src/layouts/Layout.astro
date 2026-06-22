@@ -1,4 +1,5 @@
 ---
+// src/layouts/Layout.astro
 interface Props {
   title?: string;
 }
@@ -46,13 +47,24 @@ import Pegboard from "../components/Pegboard.astro";
 </html>
 
 <style is:global>
+  @import url("https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;700;800&display=swap");
+
   :root {
     --gap: 44px; /* 定义统一的孔距步进 */
     --hole-size: 6px;
     --board-bg: #e0e0e0; /* 工业灰或木色 #d2b48c */
     --hole-color: #bcbcbc;
-    --accent: #ff5722; /* 创客常用的橙色 */
-    --label-bg: #1a1a1a;
+
+    /* 核心配色方案 */
+    --accent: #ff5722; /* 国际橘 - 警示/行动点 */
+    --accent-glow: rgba(255, 87, 34, 0.4);
+    --bg-dark: #121212; /* 深黑色背景 */
+    --label-bg: #1a1a1a; /* 标签背景 */
+    --tag: white; /* 标签文字颜色 */
+    --panel-bg: #1e1e1e; /* 面板背景 */
+    --text-main: #e0e0e0; /* 主文本颜色 */
+    --text-dim: #666666; /* 次要/注释文本 */
+    --font-mono: "JetBrains Mono", "Fira Code", "Courier New", monospace;
   }
 
   html,
@@ -61,11 +73,13 @@ import Pegboard from "../components/Pegboard.astro";
     padding: 0;
     width: 100%;
     height: 100vh;
-    background-color: #222;
+    background-color: var(--bg-dark);
     display: flex;
     justify-content: center;
     align-items: center;
-    font-family: "JetBrains Mono", "Courier New", monospace;
+    font-family: var(--font-mono);
+    color: var(--text-main);
+    line-height: 1.5;
   }
 
   .pegboard-container {
@@ -74,36 +88,52 @@ import Pegboard from "../components/Pegboard.astro";
     /* 确保容器占满全屏，这样内部的 flex 才能生效 */
     width: 100vw;
     height: 100vh;
-    overflow: hidden;
   }
 
   /* 顶部工业感 Header */
   .industrial-header {
-    background: #333;
-    color: #eee;
-    padding: 10px 20px;
+    background: var(--panel-bg);
+    border-bottom: 1px solid #333;
+    padding: 0.8rem 1.5rem;
     display: flex;
     align-items: center;
-    gap: 15px;
+    gap: 20px;
   }
 
-  .status-light {
-    width: 12px;
-    height: 12px;
-    background: #4caf50;
-    border-radius: 50%;
-    box-shadow: 0 0 10px #4caf50;
-    animation: pulse 2s infinite;
+  .brand {
+    font-weight: 800;
+    font-size: 1.1rem;
+    letter-spacing: -0.5px;
+    color: var(--text-main);
+    /* 模拟液晶屏或雕刻效果 */
+    text-shadow: 0 0 5px rgba(255, 255, 255, 0.1);
   }
 
   .nav-links a {
-    color: #999;
+    color: var(--text-dim);
     text-decoration: none;
-    margin-left: 20px;
-    font-size: 0.8rem;
+    margin-left: 25px;
+    font-size: 0.85rem;
+    font-weight: 400;
+    text-transform: uppercase; /* 强制大写增加工业感 */
+    letter-spacing: 1px;
+    transition: all 0.2s ease;
+    position: relative;
   }
+
   .nav-links a:hover {
     color: var(--accent);
+  }
+
+  .nav-links a:hover::after {
+    content: "";
+    position: absolute;
+    bottom: -4px;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: var(--accent);
+    box-shadow: 0 0 8px var(--accent-glow);
   }
 
   .workbench {
@@ -118,23 +148,44 @@ import Pegboard from "../components/Pegboard.astro";
   }
 
   .industrial-footer {
-    background: #222;
-    color: #666;
-    font-size: 10px;
-    padding: 5px 20px;
+    background: var(--bg-dark);
+    border-top: 1px solid #282828;
+    color: var(--text-dim);
+    font-size: 11px;
+    padding: 8px 20px;
     display: flex;
     justify-content: space-between;
+    letter-spacing: 0.5px;
+  }
+
+  .coordinates,
+  .system-time {
+    /* 模拟命令行输出 */
+    font-family: var(--font-mono);
+    opacity: 0.8;
+  }
+
+  .status-light {
+    width: 10px;
+    height: 10px;
+    background: #4caf50;
+    border-radius: 2px;
+    box-shadow: 0 0 12px #4caf50;
+    animation: pulse 2s infinite;
   }
 
   @keyframes pulse {
     0% {
       opacity: 1;
+      filter: brightness(1);
     }
     50% {
-      opacity: 0.5;
+      opacity: 0.6;
+      filter: brightness(1.2);
     }
     100% {
       opacity: 1;
+      filter: brightness(1);
     }
   }
 
