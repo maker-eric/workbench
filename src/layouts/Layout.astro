@@ -20,14 +20,13 @@ import Pegboard from "../components/Pegboard.astro";
     <div class="pegboard-container">
       <!-- 顶部导航：模拟工业铝型材或标签栏 -->
       <header class="industrial-header">
-        <div class="status-light"></div>
         <nav>
           <span class="brand">
             Maker Grid:/#<span class="cursor">|</span>
           </span>
           <div class="nav-links">
-            <a href="#">INVENTORY</a>
-            <a href="#">LAB_NOTES</a>
+            <a href="#">#</a>
+            <a href="#">#</a>
           </div>
         </nav>
       </header>
@@ -186,30 +185,6 @@ import Pegboard from "../components/Pegboard.astro";
     /* 模拟命令行输出 */
     font-family: var(--font-mono);
     opacity: 0.8;
-  }
-
-  .status-light {
-    width: 10px;
-    height: 10px;
-    background: #4caf50;
-    border-radius: 2px;
-    box-shadow: 0 0 12px #4caf50;
-    animation: pulse 2s infinite;
-  }
-
-  @keyframes pulse {
-    0% {
-      opacity: 1;
-      filter: brightness(1);
-    }
-    50% {
-      opacity: 0.6;
-      filter: brightness(1.2);
-    }
-    100% {
-      opacity: 1;
-      filter: brightness(1);
-    }
   }
 
   /* 移动端适配 */
