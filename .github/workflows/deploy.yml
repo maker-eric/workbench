@@ -18,7 +18,11 @@ jobs:
     steps:
       - name: Checkout your repository
         uses: actions/checkout@v4
-
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22 # 显式安装 Node 22
+          cache: "npm" # 自动缓存 node_modules 提速
       - name: Install, build, and upload your site
         uses: withastro/action@v3
         # withastro/action 自动处理了 Node 环境、安装依赖和构建过程
