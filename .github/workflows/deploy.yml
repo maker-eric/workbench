@@ -18,15 +18,25 @@ jobs:
     steps:
       - name: Checkout your repository
         uses: actions/checkout@v4
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 22 # 显式安装 Node 22
-          cache: "npm" # 自动缓存 node_modules 提速
-      - name: Install, build, and upload your site
-        uses: withastro/action@v3
-        # withastro/action 自动处理了 Node 环境、安装依赖和构建过程
-        # 如果你使用 pnpm，它也会自动识别
+          node-version: 22
+          cache: "npm"
+
+      - name: Install dependencies
+        # 使用 --install-links 是为了确保一些依赖能正确安装
+        run: npm install
+
+      - name: Build site
+        run: npm run build
+
+      - name: Upload artifact
+        # 这一步非常重要，手动将打包出来的 dist 文件夹上传给 GitHub Pages
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./dist
 
   deploy:
     needs: build
