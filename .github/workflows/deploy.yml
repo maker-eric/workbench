@@ -1,0 +1,36 @@
+name: Deploy to GitHub Pages
+
+on:
+  # 监听 push 到 main 分支的操作
+  push:
+    branches: [main]
+  # 允许手动触发部署
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout your repository
+        uses: actions/checkout@v4
+
+      - name: Install, build, and upload your site
+        uses: withastro/action@v3
+        # withastro/action 自动处理了 Node 环境、安装依赖和构建过程
+        # 如果你使用 pnpm，它也会自动识别
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
