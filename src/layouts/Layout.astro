@@ -20,12 +20,13 @@ import Pegboard from "../components/Pegboard.astro";
     <div class="pegboard-container">
       <!-- 顶部导航：模拟工业铝型材或标签栏 -->
       <header class="industrial-header">
-        <div class="status-light"></div>
         <nav>
-          <span class="brand">WORKSHOP_OS v1.0</span>
+          <span class="brand">
+            Maker Grid:/#<span class="cursor">|</span>
+          </span>
           <div class="nav-links">
-            <a href="#">INVENTORY</a>
-            <a href="#">LAB_NOTES</a>
+            <a href="#"></a>
+            <a href="#"></a>
           </div>
         </nav>
       </header>
@@ -109,6 +110,30 @@ import Pegboard from "../components/Pegboard.astro";
     text-shadow: 0 0 5px rgba(255, 255, 255, 0.1);
   }
 
+  .cursor {
+    /* 使用强调色（橙色）让光标醒目 */
+    margin-left: 2px;
+    /* 动画：每 1 秒循环一次，瞬间切换状态 */
+    animation: terminal-blink 2s steps(1) infinite;
+  }
+
+  @keyframes terminal-blink {
+    /* 0% 到 50% 显示，50% 到 100% 隐藏 */
+    0%,
+    49.9% {
+      visibility: visible;
+    }
+    50%,
+    100% {
+      visibility: hidden;
+    }
+  }
+
+  /* 增加一个小交互：鼠标悬停在 Header 上时，光标进入“高频输入”状态 */
+  .industrial-header:hover .cursor {
+    animation-duration: 0.4s;
+  }
+
   .nav-links a {
     color: var(--text-dim);
     text-decoration: none;
@@ -165,30 +190,6 @@ import Pegboard from "../components/Pegboard.astro";
     /* 模拟命令行输出 */
     font-family: var(--font-mono);
     opacity: 0.8;
-  }
-
-  .status-light {
-    width: 10px;
-    height: 10px;
-    background: #4caf50;
-    border-radius: 2px;
-    box-shadow: 0 0 12px #4caf50;
-    animation: pulse 2s infinite;
-  }
-
-  @keyframes pulse {
-    0% {
-      opacity: 1;
-      filter: brightness(1);
-    }
-    50% {
-      opacity: 0.6;
-      filter: brightness(1.2);
-    }
-    100% {
-      opacity: 1;
-      filter: brightness(1);
-    }
   }
 
   /* 移动端适配 */
