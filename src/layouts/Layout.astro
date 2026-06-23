@@ -22,7 +22,9 @@ import Pegboard from "../components/Pegboard.astro";
       <header class="industrial-header">
         <div class="status-light"></div>
         <nav>
-          <span class="brand">WORKSHOP_OS v1.0</span>
+          <span class="brand">
+            Maker Grid:/#<span class="cursor">|</span>
+          </span>
           <div class="nav-links">
             <a href="#">INVENTORY</a>
             <a href="#">LAB_NOTES</a>
@@ -107,6 +109,26 @@ import Pegboard from "../components/Pegboard.astro";
     color: var(--text-main);
     /* 模拟液晶屏或雕刻效果 */
     text-shadow: 0 0 5px rgba(255, 255, 255, 0.1);
+  }
+
+  .cursor {
+    /* 使用强调色（橙色）让光标醒目 */
+    margin-left: 2px;
+    font-weight: 800; /* 细一点的竖线更有精致感 */
+
+    /* 动画：每 1 秒循环一次，瞬间切换状态 */
+    animation: terminal-blink 2s steps(2, start) infinite;
+  }
+
+  @keyframes terminal-blink {
+    to {
+      opacity: 0;
+    }
+  }
+
+  /* 增加一个小交互：鼠标悬停在 Header 上时，光标进入“高频输入”状态 */
+  .industrial-header:hover .cursor {
+    animation-duration: 0.4s;
   }
 
   .nav-links a {
