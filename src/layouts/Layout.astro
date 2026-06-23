@@ -25,8 +25,8 @@ import Pegboard from "../components/Pegboard.astro";
             Maker Grid:/#<span class="cursor">|</span>
           </span>
           <div class="nav-links">
-            <a href="#">#</a>
-            <a href="#">#</a>
+            <a href="#"></a>
+            <a href="#"></a>
           </div>
         </nav>
       </header>
@@ -113,15 +113,19 @@ import Pegboard from "../components/Pegboard.astro";
   .cursor {
     /* 使用强调色（橙色）让光标醒目 */
     margin-left: 2px;
-    font-weight: 800; /* 细一点的竖线更有精致感 */
-
     /* 动画：每 1 秒循环一次，瞬间切换状态 */
-    animation: terminal-blink 2s steps(2, start) infinite;
+    animation: terminal-blink 2s steps(1) infinite;
   }
 
   @keyframes terminal-blink {
-    to {
-      opacity: 0;
+    /* 0% 到 50% 显示，50% 到 100% 隐藏 */
+    0%,
+    49.9% {
+      visibility: visible;
+    }
+    50%,
+    100% {
+      visibility: hidden;
     }
   }
 
