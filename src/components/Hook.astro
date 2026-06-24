@@ -25,18 +25,20 @@ const { x, y, cols = 4, rows = 3, class: customClass } = Astro.props;
 
 <style>
   .hook {
-    transform: translate(-50%, -6px);
     grid-column: var(--x) / span var(--cols);
     grid-row: var(--y) / span var(--rows);
     display: flex;
     position: relative;
-    align-items: center;
+    align-items: flex-start;
+    justify-content: center;
+    /* padding-top: 10px; */
+    box-sizing: border-box;
+    margin-top: -6px;
   }
 
   .peg-pin {
     position: absolute;
     top: 0;
-    left: 0;
     width: 12px;
     height: 12px;
     background: radial-gradient(circle at 30% 30%, #666, #111);

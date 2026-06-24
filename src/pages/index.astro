@@ -177,7 +177,7 @@ const allTools = await getCollection("tools");
         // 判断是纵向空间不足还是横向空间不足，决定是撑满宽还是撑满高
         if (totalCols < 13) {
            // 一列显示：宽度撑满，y 坐标顺排（防止重叠）
-           hook.style.setProperty('--x', (Math.floor(totalCols/2) + 1).toString()); // 居中显示
+           hook.style.setProperty('--x', '1'); // 居中显示
            hook.style.setProperty('--cols', totalCols.toString());           
            hook.style.setProperty('--y', (visiblePostCount*Math.floor(totalRows/2) + 1).toString());
            hook.style.setProperty('--rows', (Math.floor(totalRows/2)-1).toString());
