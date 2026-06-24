@@ -92,6 +92,13 @@ const allTools = await getCollection("tools");
     line-height: 1.5;
     margin-bottom: 10px;
     color: #444;
+
+    display: -webkit-box;
+    -webkit-line-clamp: 3;    /* 限制显示 3 行 */
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis; 
+    
   }
   .read-more {
     font-size: 0.7rem;
