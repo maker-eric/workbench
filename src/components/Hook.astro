@@ -4,9 +4,10 @@ interface Props {
   y: number; /* 起始行坐标 */
   cols?: number; /* 占用几列 */
   rows?: number; /* 占用几行 */
+  class?: string; /* 可选的自定义类名 */
 }
 
-const { x, y, cols = 4, rows = 3 } = Astro.props;
+const { x, y, cols = 4, rows = 3, class: customClass } = Astro.props;
 
 // 计算 Grid 样式
 const hookStyle = {
@@ -15,7 +16,7 @@ const hookStyle = {
 };
 ---
 
-<div class="hook" style={hookStyle}>
+<div class:list={["hook", customClass]} style={hookStyle}>
   <div class="peg-pin"></div>
   <!-- 模拟固定钉子 -->
   <slot />

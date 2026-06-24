@@ -63,7 +63,13 @@ const allTools = await getCollection("tools");
     const widgetAsset = WIDGET_MAP[tool.data.widgetType];
     
     return (
-      <Hook x={tool.data.x} y={tool.data.y} cols={tool.data.cols} rows={tool.data.rows}>
+      <Hook 
+        x={tool.data.x} 
+        y={tool.data.y} 
+        cols={tool.data.cols} 
+        rows={tool.data.rows}
+        class="tool-hook"
+        >
         <Tool label={tool.data.label}>
           {widgetAsset && (
             <img 
@@ -127,3 +133,69 @@ const allTools = await getCollection("tools");
     color: #444;    
   }
 </style>
+
+<script>
+  function autoAlignHooks() {
+    // 2. 获取 Pegboard 容器
+    const board = document.querySelector('.pegboard') as HTMLElement;
+    if (!board) return;
+
+    const boardStyle = window.getComputedStyle(board);
+    const gridColsResolved = boardStyle.gridTemplateColumns;
+    const colArray = gridColsResolved.trim().split(' ');
+    const gap = parseFloat(colArray[0]);    
+    console.log(`colArray: ${colArray}, gap: ${gap}`);
+
+    // 3. 计算当前容器实际能容纳的列数 (floor 取整保证对齐孔位)
+    const paddingLeft = parseFloat(boardStyle.paddingLeft);
+    const paddingRight = parseFloat(boardStyle.paddingRight);
+    const totalCols = Math.round((board.clientWidth - paddingLeft - paddingRight) / gap);
+    console.log(`Current Grid Columns: ${totalCols}`);
+
+    const paddingTop = parseFloat(boardStyle.paddingTop);
+    const paddingBottom = parseFloat(boardStyle.paddingBottom);
+    const totalRows = Math.round((board.clientHeight - paddingTop - paddingBottom) / gap);
+    console.log(`Current Grid Rows: ${totalRows}`);
+
+    const isTooSmall = totalCols < 13 || totalRows < 13;
+    const toolHooks = document.querySelectorAll('.tool-hook') as NodeListOf<HTMLElement>;
+
+    toolHooks.forEach((hook) => {
+        if (isTooSmall) {
+            // 隐藏工具
+            hook.style.display = 'none';
+        } else {
+            // 显示工具（由于 Hook 默认是 flex 布局，这里设为 flex）
+            hook.style.display = 'flex';
+        }
+    });
+    /*
+    // 4. 遍历所有需要动态布局的 Hook
+    const dynamicHooks = document.querySelectorAll('.hook[data-layout]:not([data-layout="manual"])');
+
+    dynamicHooks.forEach((hook: any) => {
+      const layout = hook.dataset.layout;
+      const itemCols = parseInt(hook.dataset.cols || "1");
+      let newX = parseInt(hook.style.getPropertyValue('--x')); // 默认值
+
+      if (layout === "center") {
+        // 公式：(总列数 - 物体跨度) / 2 + 1 (Grid 坐标从 1 开始)
+        newX = Math.floor((totalCols - itemCols) / 2) + 1;
+      } else if (layout === "right") {
+        // 公式：总列数 - 物体跨度 + 1
+        newX = totalCols - itemCols + 1;
+      }
+
+      // 5. 应用计算后的 x 坐标
+      // 确保坐标不小于 1
+      hook.style.setProperty('--x', Math.max(1, newX).toString());
+      // hook.style.opacity = "1"; // 如果设置了初始透明，这里显示
+    });*/
+  }  
+
+  // 监听窗口缩放
+  window.addEventListener('resize', autoAlignHooks);
+
+  // 监听 Astro 页面加载 (支持 View Transitions)
+  document.addEventListener('astro:page-load', autoAlignHooks);
+</script>
