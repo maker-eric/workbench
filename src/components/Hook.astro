@@ -5,13 +5,18 @@ interface Props {
   y: number; /* 起始行坐标 */
   cols?: number; /* 占用几列 */
   rows?: number; /* 占用几行 */
+  class?: string; /* 可选的自定义类名 */
 }
 
-const { x, y, cols = 4, rows = 3 } = Astro.props;
+const { x, y, cols = 4, rows = 3, class: customClass } = Astro.props;
 ---
 
 <div
-  class="hook"
+  class:list={["hook", customClass]}
+  data-orig-x={x}
+  data-orig-y={y}
+  data-orig-cols={cols}
+  data-orig-rows={rows}
   style={`--x: ${x}; --y: ${y}; --cols: ${cols}; --rows: ${rows};`}
 >
   <div class="peg-pin"></div>
@@ -23,17 +28,18 @@ const { x, y, cols = 4, rows = 3 } = Astro.props;
   .hook {
     grid-column: var(--x) / span var(--cols);
     grid-row: var(--y) / span var(--rows);
-
-    transform: translate(-50%, -6px);
     display: flex;
     position: relative;
-    align-items: center;
+    align-items: flex-start;
+    justify-content: center;
+    /* padding-top: 10px; */
+    box-sizing: border-box;
+    margin-top: -6px;
   }
 
   .peg-pin {
     position: absolute;
     top: 0;
-    left: 0;
     width: 12px;
     height: 12px;
     background: radial-gradient(circle at 30% 30%, #666, #111);

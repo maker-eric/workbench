@@ -1,8 +1,8 @@
 ---
 label: "PRECISION_MEASURE"
 widgetType: "caliper"
-x: 20
-y: 3
-cols: 3
+x: 12
+y: 10
+cols: 2
 rows: 6
 ---
