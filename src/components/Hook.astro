@@ -8,15 +8,16 @@ interface Props {
 }
 
 const { x, y, cols = 4, rows = 3, class: customClass } = Astro.props;
-
-// 计算 Grid 样式
-const hookStyle = {
-  gridColumn: `${x} / span ${cols}`,
-  gridRow: `${y} / span ${rows}`,
-};
 ---
 
-<div class:list={["hook", customClass]} style={hookStyle}>
+<div
+  class:list={["hook", customClass]}
+  data-orig-x={x}
+  data-orig-y={y}
+  data-orig-cols={cols}
+  data-orig-rows={rows}
+  style={`--x: ${x}; --y: ${y}; --cols: ${cols}; --rows: ${rows};`}
+>
   <div class="peg-pin"></div>
   <!-- 模拟固定钉子 -->
   <slot />
@@ -25,6 +26,8 @@ const hookStyle = {
 <style>
   .hook {
     transform: translate(-50%, -6px);
+    grid-column: var(--x) / span var(--cols);
+    grid-row: var(--y) / span var(--rows);
     display: flex;
     position: relative;
     align-items: center;

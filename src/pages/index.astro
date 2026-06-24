@@ -32,6 +32,7 @@ const allTools = await getCollection("tools");
         y={post.data.y}
         cols={post.data.cols}
         rows={post.data.rows}
+        class="post-hook"
       >
         
           <Card title={post.data.title} id={post.id}>
@@ -160,37 +161,47 @@ const allTools = await getCollection("tools");
     const isTooSmall = totalCols < 13 || totalRows < 13;
     const toolHooks = document.querySelectorAll('.tool-hook') as NodeListOf<HTMLElement>;
 
-    toolHooks.forEach((hook) => {
-        if (isTooSmall) {
-            // 隐藏工具
-            hook.style.display = 'none';
-        } else {
-            // 显示工具（由于 Hook 默认是 flex 布局，这里设为 flex）
-            hook.style.display = 'flex';
-        }
+    toolHooks.forEach(hook => {
+      hook.style.display = isTooSmall ? 'none' : 'flex';
     });
-    /*
-    // 4. 遍历所有需要动态布局的 Hook
-    const dynamicHooks = document.querySelectorAll('.hook[data-layout]:not([data-layout="manual"])');
+    
+    const postHooks = document.querySelectorAll('.post-hook') as NodeListOf<HTMLElement>;
+    let visiblePostCount = 0;
 
-    dynamicHooks.forEach((hook: any) => {
-      const layout = hook.dataset.layout;
-      const itemCols = parseInt(hook.dataset.cols || "1");
-      let newX = parseInt(hook.style.getPropertyValue('--x')); // 默认值
-
-      if (layout === "center") {
-        // 公式：(总列数 - 物体跨度) / 2 + 1 (Grid 坐标从 1 开始)
-        newX = Math.floor((totalCols - itemCols) / 2) + 1;
-      } else if (layout === "right") {
-        // 公式：总列数 - 物体跨度 + 1
-        newX = totalCols - itemCols + 1;
+    postHooks.forEach((hook, index) => {
+    if (isTooSmall) {
+      // --- 精简模式逻辑 ---
+      if (visiblePostCount < 2) {
+        hook.style.display = 'flex';
+        
+        // 判断是纵向空间不足还是横向空间不足，决定是撑满宽还是撑满高
+        if (totalCols < 13) {
+           // 一列显示：宽度撑满，y 坐标顺排（防止重叠）
+           hook.style.setProperty('--x', (Math.floor(totalCols/2) + 1).toString()); // 居中显示
+           hook.style.setProperty('--cols', totalCols.toString());           
+           hook.style.setProperty('--y', (visiblePostCount*Math.floor(totalRows/2) + 1).toString());
+           hook.style.setProperty('--rows', (Math.floor(totalRows/2)-1).toString());
+        } else {
+           // 一行显示：高度撑满，x 坐标顺排
+           hook.style.setProperty('--y', '1');
+           hook.style.setProperty('--rows', totalRows.toString());
+           // 假设每个精简文章占 6 列宽度
+           hook.style.setProperty('--x', (visiblePostCount * 7 + 1).toString());
+        }
+        visiblePostCount++;
+      } else {
+        // 超过 3 个的隐藏
+        hook.style.display = 'none';
       }
-
-      // 5. 应用计算后的 x 坐标
-      // 确保坐标不小于 1
-      hook.style.setProperty('--x', Math.max(1, newX).toString());
-      // hook.style.opacity = "1"; // 如果设置了初始透明，这里显示
-    });*/
+    } else {
+      // --- 恢复原始布局逻辑 ---
+      hook.style.display = 'flex';
+      hook.style.setProperty('--x', hook.dataset.origX!);
+      hook.style.setProperty('--y', hook.dataset.origY!);
+      hook.style.setProperty('--cols', hook.dataset.origCols!);
+      hook.style.setProperty('--rows', hook.dataset.origRows!);
+    }
+  });    
   }  
 
   // 监听窗口缩放
