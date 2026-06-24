@@ -184,9 +184,10 @@ const allTools = await getCollection("tools");
         } else {
            // 一行显示：高度撑满，x 坐标顺排
            hook.style.setProperty('--y', '1');
+           hook.style.setProperty('--cols', (Math.floor(totalCols/2)-1).toString());
            hook.style.setProperty('--rows', totalRows.toString());
            // 假设每个精简文章占 6 列宽度
-           hook.style.setProperty('--x', (visiblePostCount * 7 + 1).toString());
+           hook.style.setProperty('--x', (visiblePostCount * Math.floor(totalCols/2) + 1).toString());
         }
         visiblePostCount++;
       } else {
