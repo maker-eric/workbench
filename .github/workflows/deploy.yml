@@ -3,7 +3,7 @@ name: Deploy to GitHub Pages
 on:
   # 监听 push 到 main 分支的操作
   push:
-    branches: [main]
+    branches: ["main", "posts"]
   # 允许手动触发部署
   workflow_dispatch:
 
@@ -16,8 +16,19 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout your repository
+      - name: Checkout Theme
         uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - name: Clean Test Posts
+        run: rm -rf src/content/posts/*
+
+      - name: Checkout Posts Content
+        uses: actions/checkout@v4
+        with:
+          ref: posts
+          path: src/content/posts
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
