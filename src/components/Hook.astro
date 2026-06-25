@@ -1,5 +1,4 @@
 ---
-// src/components/Hook.astro
 interface Props {
   x: number; /* 起始列坐标 */
   y: number; /* 起始行坐标 */
@@ -48,21 +47,5 @@ const { x, y, cols = 4, rows = 3, class: customClass } = Astro.props;
     transform: translate(-50%, 0%);
     z-index: 20;
     box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-  }
-
-  @container (max-width: 640px) {
-    .hook {
-      /* 移动端：忽略 x, y，变为自动顺序排列 */
-      grid-column: auto !important;
-      grid-row: auto !important;
-      width: 100%;
-      height: auto;
-      transform: none !important;
-      display: block; /* 移动端改为块级，更易控制高度 */
-
-      /* grid-column: span var(--cols); 
-      grid-row: auto; */
-      /* 如果在手机上想强制满宽，可以设为：grid-column: 1 / -1; */
-    }
   }
 </style>
