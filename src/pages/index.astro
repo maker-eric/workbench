@@ -5,6 +5,7 @@ import Layout from "../layouts/Layout.astro";
 import Hook from "../components/Hook.astro";
 import Card from "../components/Card.astro";
 import Tool from "../components/Tool.astro";
+import NavPlate from "../components/NavPlate.astro";
 
 
 import pidTuner from "../assets/pid-tuner.svg";
@@ -82,6 +83,16 @@ const allTools = await getCollection("tools");
     );
   })}
 
+<NavPlate 
+  x={1}
+  y={1}
+  cols={8}
+  rows={1}
+  class="nav-plate"
+  currentPage={1} 
+  totalPages={5} 
+  baseUrl="/posts" 
+    />
 </Layout>
 
 <style>
@@ -207,8 +218,20 @@ const allTools = await getCollection("tools");
       hook.style.setProperty('--cols', hook.dataset.origCols!);
       hook.style.setProperty('--rows', hook.dataset.origRows!);
     }
-  });    
-  }  
+  });  
+    const navPlate = document.querySelector('.nav-plate') as HTMLElement;
+    if (isTooSmall) {
+      navPlate.style.setProperty('--x', '1');
+      navPlate.style.setProperty('--y', (totalRows - 1).toString());
+    } else {
+      const startX = totalCols - 8 + 1;
+      const startY = totalRows - 2 + 1;
+      
+      navPlate.style.setProperty('--x', startX.toString());
+      navPlate.style.setProperty('--y', startY.toString());
+    }
+
+  }    
 
   // 监听窗口缩放
   window.addEventListener('resize', autoAlignHooks);
