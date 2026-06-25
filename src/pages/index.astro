@@ -33,27 +33,25 @@ const allTools = await getCollection("tools");
         cols={post.data.cols}
         rows={post.data.rows}
         class="post-hook"
-      >
-        
-          <Card title={post.data.title} id={post.id}>
-            <div class="post-preview">
-              {/* Astro 5 中 post.body 已被弃用，建议使用简短摘要或摘要渲染 */}
-              {/* 暂时可以使用 post.data 中的新字段或直接显示 */}
-              {post.data.excerpt || "No preview available."}
-            </div>            
-            <div class="post-meta-footer">
-              <time class="post-date">
-                <span class="meta-label">DATE:</span>
-                {new Date(post.data.date).toLocaleDateString('zh-CN', {
-                  year: 'numeric',
-                  month: '2-digit',
-                  day: '2-digit'
-                }).replace(/\//g, '.')}
-              </time>
-              <a href={`posts/${post.id}`} class="read-more">DETAILS >></a>
-            </div>
-          </Card>
-        
+      >        
+        <Card title={post.data.title} id={post.id}>
+          <div class="post-preview">
+            {/* Astro 5 中 post.body 已被弃用，建议使用简短摘要或摘要渲染 */}
+            {/* 暂时可以使用 post.data 中的新字段或直接显示 */}
+            {post.data.excerpt || "No preview available."}
+          </div>            
+          <div class="post-meta-footer">
+            <time class="post-date">
+              <span class="meta-label">DATE:</span>
+              {new Date(post.data.date).toLocaleDateString('zh-CN', {
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit'
+              }).replace(/\//g, '.')}
+            </time>
+            <a href={`posts/${post.id}`} class="read-more">DETAILS >></a>
+          </div>
+        </Card>        
       </Hook>
     ))
   }    
