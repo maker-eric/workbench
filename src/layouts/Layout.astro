@@ -170,8 +170,7 @@ import Pegboard from "../components/Pegboard.astro";
     /* 修改点：align-items 从 flex-start 改为 stretch */
     /* 这样子元素（Pegboard 或 giant-card-container）默认高度会撑满 workbench */
     align-items: stretch;
-    overflow-y: auto;
-    overflow-x: hidden;
+    overflow: hidden;
   }
 
   .industrial-footer {
@@ -193,7 +192,7 @@ import Pegboard from "../components/Pegboard.astro";
   }
 
   /* 移动端适配 */
-  @container (max-width: 640px) {
+  @media (max-width: 1024px) {
     .pegboard-container {
       aspect-ratio: auto;
       height: 100vh;
