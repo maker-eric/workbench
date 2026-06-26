@@ -1,6 +1,6 @@
 ---
-title: "AstroPaper"
-date: 2023-10-27
+title: "AstroPaper6"
+date: 2023-10-22
 x: 5
 y: 2
 cols: 8

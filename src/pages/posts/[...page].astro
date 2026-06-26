@@ -28,33 +28,15 @@ export const getStaticPaths: GetStaticPaths = async ({ paginate }) => {
 };
 
 const { page } = Astro.props;
-
-const cardPositions = [
-  { x: 1, y: 1, cols: 8, rows: 6 },
-  { x: 1, y: 8, cols: 8, rows: 6 },
-  { x: 1, y: 15, cols: 8, rows: 6 },
-  { x: 10, y: 1, cols: 8, rows: 6 },
-  { x: 10, y: 8, cols: 8, rows: 6 },
-  { x: 10, y: 15, cols: 8, rows: 6 },
-  { x: 19, y: 1, cols: 8, rows: 6 },
-  { x: 19, y: 8, cols: 8, rows: 6 },
-  { x: 19, y: 15, cols: 8, rows: 6 },
-];
 ---
 
 <Layout title="Pegboard Posts">
   <!-- 这里的 class 应该和你 index.astro 里的主容器一致 -->
   {
     page.data.map((post, index) => {
-      const pos = cardPositions[index]; // 获取预设的网格坐标
+      //   const pos = cardPositions[index]; // 获取预设的网格坐标
       return (
-        <Hook
-          x={pos.x}
-          y={pos.y}
-          cols={pos.cols}
-          rows={pos.rows}
-          class="post-hook"
-        >
+        <Hook x={1} y={1} cols={8} rows={6} class="post-hook">
           <Card title={post.data.title} id={post.id}>
             <div class="post-preview">
               {post.data.excerpt || "No preview available."}
@@ -88,8 +70,8 @@ const cardPositions = [
     cols={8}
     rows={1}
     class="nav-plate"
-    currentPage={1}
-    totalPages={5}
+    currentPage={page.currentPage}
+    totalPages={page.lastPage}
     baseUrl="/posts"
   />
 </Layout>
@@ -235,14 +217,24 @@ const cardPositions = [
           hook.style.display = "none";
         }
       } else {
-        // --- 恢复原始布局逻辑 ---
+        // --- 桌面端模式：动态网格（先列后行） ---
+        // 计算一列最多能放几个卡片
+        const cardsPerCol = Math.floor(totalRows / (6 + 1));
+
+        // 计算当前卡片在第几列，第几行
+        const colIndex = Math.floor(index / cardsPerCol); // 第几列
+        const rowIndex = index % cardsPerCol; // 该列的第几个
+
+        // 计算坐标
+        const xPos = colIndex * (8 + 1) + 1;
+        const yPos = rowIndex * (6 + 1) + 1;
+
         hook.style.display = "flex";
-        hook.style.setProperty("--x", hook.dataset.origX!);
-        hook.style.setProperty("--y", hook.dataset.origY!);
-        hook.style.setProperty("--cols", hook.dataset.origCols!);
-        hook.style.setProperty("--rows", hook.dataset.origRows!);
+        hook.style.setProperty("--x", xPos.toString());
+        hook.style.setProperty("--y", yPos.toString());
       }
     });
+
     const navPlate = document.querySelector(".nav-plate") as HTMLElement;
     if (isTooSmall) {
       navPlate.style.setProperty("--x", "1");
