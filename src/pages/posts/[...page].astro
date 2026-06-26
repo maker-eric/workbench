@@ -1,0 +1,264 @@
+---
+// src/pages/posts/[...page].astro
+import { getCollection } from "astro:content";
+import Layout from "../../layouts/Layout.astro";
+import Hook from "../../components/Hook.astro";
+import Card from "../../components/Card.astro";
+import NavPlate from "../../components/NavPlate.astro";
+import type { GetStaticPaths, Page } from "astro";
+import type { CollectionEntry } from "astro:content";
+
+import "../../styles/common.css";
+
+interface Props {
+  page: Page<CollectionEntry<"posts">>; // 显式声明 page 的类型
+}
+
+export const getStaticPaths: GetStaticPaths = async ({ paginate }) => {
+  const posts = await getCollection("posts");
+
+  // 排序：按日期倒序
+  const sortedPosts = posts.sort(
+    (a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime(),
+  );
+
+  // 这里的 pageSize 建议设置为 index.astro 预留的卡片坑位数
+  // 假设你的 index 设计了 8 个卡片位置
+  return paginate(sortedPosts, { pageSize: 6 });
+};
+
+const { page } = Astro.props;
+
+const cardPositions = [
+  { x: 1, y: 1, cols: 8, rows: 6 },
+  { x: 1, y: 8, cols: 8, rows: 6 },
+  { x: 1, y: 15, cols: 8, rows: 6 },
+  { x: 10, y: 1, cols: 8, rows: 6 },
+  { x: 10, y: 8, cols: 8, rows: 6 },
+  { x: 10, y: 15, cols: 8, rows: 6 },
+  { x: 19, y: 1, cols: 8, rows: 6 },
+  { x: 19, y: 8, cols: 8, rows: 6 },
+  { x: 19, y: 15, cols: 8, rows: 6 },
+];
+---
+
+<Layout title="Pegboard Posts">
+  <!-- 这里的 class 应该和你 index.astro 里的主容器一致 -->
+  {
+    page.data.map((post, index) => {
+      const pos = cardPositions[index]; // 获取预设的网格坐标
+      return (
+        <Hook
+          x={pos.x}
+          y={pos.y}
+          cols={pos.cols}
+          rows={pos.rows}
+          class="post-hook"
+        >
+          <Card title={post.data.title} id={post.id}>
+            <div class="post-preview">
+              {post.data.excerpt || "No preview available."}
+            </div>
+
+            <div class="post-meta-footer">
+              <time class="post-date">
+                <span class="meta-label">DATE:</span>
+                {new Date(post.data.date || post.data.date)
+                  .toLocaleDateString("zh-CN", {
+                    year: "numeric",
+                    month: "2-digit",
+                    day: "2-digit",
+                  })
+                  .replace(/\//g, ".")}
+              </time>
+              <a href={`/posts/${post.id}`} class="read-more">
+                DETAILS &gt;&gt;
+              </a>
+            </div>
+          </Card>
+        </Hook>
+      );
+    })
+  }
+
+  <!-- 分页条：放在网格底部，使用与 index.astro 一致的位置 -->
+  <NavPlate
+    x={1}
+    y={1}
+    cols={8}
+    rows={1}
+    class="nav-plate"
+    currentPage={1}
+    totalPages={5}
+    baseUrl="/posts"
+  />
+</Layout>
+
+<style>
+  /* 这里的样式应该从你的 index.astro 中拷贝过来，确保背景和钉孔对齐 */
+  .pegboard {
+    display: grid;
+    grid-template-columns: repeat(8, 1fr);
+    grid-auto-rows: 40px; /* 假设你的网格一行是 40px */
+    gap: 16px;
+    padding: 20px;
+    min-height: 100vh;
+    background-color: #e0e0e0; /* 你的背景色 */
+    /* ... 其他钉板特有样式 ... */
+  }
+
+  .post-desc {
+    font-size: 0.85rem;
+    opacity: 0.8;
+    line-height: 1.4;
+  }
+  .post-preview {
+    font-size: 0.85rem;
+    line-height: 1.5;
+    margin-bottom: 10px;
+    color: #444;
+
+    display: -webkit-box;
+    -webkit-line-clamp: 3; /* 限制显示 3 行 */
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .read-more {
+    font-size: 0.7rem;
+    color: var(--accent);
+    text-decoration: none;
+    font-weight: bold;
+    display: block;
+    margin-top: auto;
+  }
+  .read-more:hover {
+    text-decoration: underline;
+  }
+
+  .post-meta-footer {
+    margin-top: auto; /* 推到底部 */
+    padding-top: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: left;
+  }
+  .post-date {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: #666;
+    letter-spacing: 0.5px;
+  }
+  .meta-label {
+    color: #444;
+  }
+</style>
+
+<script>
+  function autoAlignHooks() {
+    // 2. 获取 Pegboard 容器
+    const board = document.querySelector(".pegboard") as HTMLElement;
+    if (!board) return;
+
+    const boardStyle = window.getComputedStyle(board);
+    const gridColsResolved = boardStyle.gridTemplateColumns;
+    const colArray = gridColsResolved.trim().split(" ");
+    const gap = parseFloat(colArray[0]);
+    console.log(`colArray: ${colArray}, gap: ${gap}`);
+
+    // 3. 计算当前容器实际能容纳的列数 (floor 取整保证对齐孔位)
+    const paddingLeft = parseFloat(boardStyle.paddingLeft);
+    const paddingRight = parseFloat(boardStyle.paddingRight);
+    const totalCols = Math.round(
+      (board.clientWidth - paddingLeft - paddingRight) / gap,
+    );
+    console.log(`Current Grid Columns: ${totalCols}`);
+
+    const paddingTop = parseFloat(boardStyle.paddingTop);
+    const paddingBottom = parseFloat(boardStyle.paddingBottom);
+    const totalRows = Math.round(
+      (board.clientHeight - paddingTop - paddingBottom) / gap,
+    );
+    console.log(`Current Grid Rows: ${totalRows}`);
+
+    const isTooSmall = totalCols < 13 || totalRows < 13;
+    const toolHooks = document.querySelectorAll(
+      ".tool-hook",
+    ) as NodeListOf<HTMLElement>;
+
+    toolHooks.forEach((hook) => {
+      hook.style.display = isTooSmall ? "none" : "flex";
+    });
+
+    const postHooks = document.querySelectorAll(
+      ".post-hook",
+    ) as NodeListOf<HTMLElement>;
+    let visiblePostCount = 0;
+
+    postHooks.forEach((hook, index) => {
+      if (isTooSmall) {
+        // --- 精简模式逻辑 ---
+        if (visiblePostCount < 2) {
+          hook.style.display = "flex";
+
+          // 判断是纵向空间不足还是横向空间不足，决定是撑满宽还是撑满高
+          if (totalCols < 13) {
+            // 一列显示：宽度撑满，y 坐标顺排（防止重叠）
+            hook.style.setProperty("--x", "1"); // 居中显示
+            hook.style.setProperty("--cols", totalCols.toString());
+            hook.style.setProperty(
+              "--y",
+              (visiblePostCount * Math.floor(totalRows / 2) + 1).toString(),
+            );
+            hook.style.setProperty(
+              "--rows",
+              (Math.floor(totalRows / 2) - 1).toString(),
+            );
+          } else {
+            // 一行显示：高度撑满，x 坐标顺排
+            hook.style.setProperty("--y", "1");
+            hook.style.setProperty(
+              "--cols",
+              (Math.floor(totalCols / 2) - 1).toString(),
+            );
+            hook.style.setProperty("--rows", totalRows.toString());
+            // 假设每个精简文章占 6 列宽度
+            hook.style.setProperty(
+              "--x",
+              (visiblePostCount * Math.floor(totalCols / 2) + 1).toString(),
+            );
+          }
+          visiblePostCount++;
+        } else {
+          // 超过 3 个的隐藏
+          hook.style.display = "none";
+        }
+      } else {
+        // --- 恢复原始布局逻辑 ---
+        hook.style.display = "flex";
+        hook.style.setProperty("--x", hook.dataset.origX!);
+        hook.style.setProperty("--y", hook.dataset.origY!);
+        hook.style.setProperty("--cols", hook.dataset.origCols!);
+        hook.style.setProperty("--rows", hook.dataset.origRows!);
+      }
+    });
+    const navPlate = document.querySelector(".nav-plate") as HTMLElement;
+    if (isTooSmall) {
+      navPlate.style.setProperty("--x", "1");
+      navPlate.style.setProperty("--y", (totalRows - 1).toString());
+    } else {
+      const startX = totalCols - 8 + 1;
+      const startY = totalRows - 2 + 1;
+
+      navPlate.style.setProperty("--x", startX.toString());
+      navPlate.style.setProperty("--y", startY.toString());
+    }
+  }
+
+  // 监听窗口缩放
+  window.addEventListener("resize", autoAlignHooks);
+
+  // 监听 Astro 页面加载 (支持 View Transitions)
+  document.addEventListener("astro:page-load", autoAlignHooks);
+</script>
