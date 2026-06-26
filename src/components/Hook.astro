@@ -1,13 +1,32 @@
 ---
+// src/components/Hook.astro
 interface Props {
-  x: number; /* 起始列坐标 */
-  y: number; /* 起始行坐标 */
+  x?: number; /* 起始列坐标 */
+  y?: number; /* 起始行坐标 */
   cols?: number; /* 占用几列 */
   rows?: number; /* 占用几行 */
   class?: string; /* 可选的自定义类名 */
+  style?: string;
 }
 
-const { x, y, cols = 4, rows = 3, class: customClass } = Astro.props;
+const {
+  x,
+  y,
+  cols = 4,
+  rows = 3,
+  class: customClass,
+  style: incomingStyle = "",
+} = Astro.props;
+
+const combinedStyle = [
+  `--x: ${x}`,
+  `--y: ${y}`,
+  `--cols: ${cols}`,
+  `--rows: ${rows}`,
+  incomingStyle, // 插入外部传入的 style (如 "display: none;")
+]
+  .filter(Boolean)
+  .join("; ");
 ---
 
 <div
@@ -16,7 +35,7 @@ const { x, y, cols = 4, rows = 3, class: customClass } = Astro.props;
   data-orig-y={y}
   data-orig-cols={cols}
   data-orig-rows={rows}
-  style={`--x: ${x}; --y: ${y}; --cols: ${cols}; --rows: ${rows};`}
+  style={combinedStyle}
 >
   <div class="peg-pin"></div>
   <!-- 模拟固定钉子 -->
