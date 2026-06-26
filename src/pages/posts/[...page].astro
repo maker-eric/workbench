@@ -176,75 +176,92 @@ const { page } = Astro.props;
     const postHooks = document.querySelectorAll(
       ".post-hook",
     ) as NodeListOf<HTMLElement>;
-    let visiblePostCount = 0;
 
-    postHooks.forEach((hook, index) => {
-      if (isTooSmall) {
-        // --- 精简模式逻辑 ---
-        if (visiblePostCount < 2) {
-          hook.style.display = "flex";
+    // --- 1. 先确定 NavPlate 的位置 ---
+    const navW = 8;
+    const navH = 1;
+    let navX, navY;
 
-          // 判断是纵向空间不足还是横向空间不足，决定是撑满宽还是撑满高
-          if (totalCols < 13) {
-            // 一列显示：宽度撑满，y 坐标顺排（防止重叠）
-            hook.style.setProperty("--x", "1"); // 居中显示
-            hook.style.setProperty("--cols", totalCols.toString());
-            hook.style.setProperty(
-              "--y",
-              (visiblePostCount * Math.floor(totalRows / 2) + 1).toString(),
-            );
-            hook.style.setProperty(
-              "--rows",
-              (Math.floor(totalRows / 2) - 1).toString(),
-            );
-          } else {
-            // 一行显示：高度撑满，x 坐标顺排
-            hook.style.setProperty("--y", "1");
-            hook.style.setProperty(
-              "--cols",
-              (Math.floor(totalCols / 2) - 1).toString(),
-            );
-            hook.style.setProperty("--rows", totalRows.toString());
-            // 假设每个精简文章占 6 列宽度
-            hook.style.setProperty(
-              "--x",
-              (visiblePostCount * Math.floor(totalCols / 2) + 1).toString(),
-            );
-          }
-          visiblePostCount++;
-        } else {
-          // 超过 3 个的隐藏
-          hook.style.display = "none";
-        }
-      } else {
-        // --- 桌面端模式：动态网格（先列后行） ---
-        // 计算一列最多能放几个卡片
-        const cardsPerCol = Math.floor(totalRows / (6 + 1));
-
-        // 计算当前卡片在第几列，第几行
-        const colIndex = Math.floor(index / cardsPerCol); // 第几列
-        const rowIndex = index % cardsPerCol; // 该列的第几个
-
-        // 计算坐标
-        const xPos = colIndex * (8 + 1) + 1;
-        const yPos = rowIndex * (6 + 1) + 1;
-
-        hook.style.display = "flex";
-        hook.style.setProperty("--x", xPos.toString());
-        hook.style.setProperty("--y", yPos.toString());
-      }
-    });
-
-    const navPlate = document.querySelector(".nav-plate") as HTMLElement;
     if (isTooSmall) {
-      navPlate.style.setProperty("--x", "1");
-      navPlate.style.setProperty("--y", (totalRows - 1).toString());
+      navX = 1;
+      navY = totalRows - 1; // 移动端简单的底部
     } else {
-      const startX = totalCols - 8 + 1;
-      const startY = totalRows - 2 + 1;
+      navX = totalCols - navW + 1;
+      navY = totalRows - navH + 1;
+    }
+    const navPlate = document.querySelector(".nav-plate") as HTMLElement;
+    navPlate.style.setProperty("--x", navX.toString());
+    navPlate.style.setProperty("--y", navY.toString());
 
-      navPlate.style.setProperty("--x", startX.toString());
-      navPlate.style.setProperty("--y", startY.toString());
+    if (isTooSmall) {
+      // --- 精简模式逻辑 ---
+      postHooks.forEach((hook, index) => {
+        hook.style.display = "flex";
+
+        // 判断是纵向空间不足还是横向空间不足，决定是撑满宽还是撑满高
+        if (totalCols < 13) {
+          // 一列显示：宽度撑满，y 坐标顺排（防止重叠）
+          hook.style.setProperty("--x", "1"); // 居中显示
+          hook.style.setProperty("--cols", totalCols.toString());
+          hook.style.setProperty(
+            "--y",
+            (index * Math.floor(totalRows / 2) + 1).toString(),
+          );
+          hook.style.setProperty(
+            "--rows",
+            (Math.floor(totalRows / 2) - 1).toString(),
+          );
+        } else {
+          // 一行显示：高度撑满，x 坐标顺排
+          hook.style.setProperty("--y", "1");
+          hook.style.setProperty(
+            "--cols",
+            (Math.floor(totalCols / 2) - 1).toString(),
+          );
+          hook.style.setProperty("--rows", totalRows.toString());
+          // 假设每个精简文章占 6 列宽度
+          hook.style.setProperty(
+            "--x",
+            (index * Math.floor(totalCols / 2) + 1).toString(),
+          );
+        }
+        index++;
+      });
+    } else {
+      const cardW = 8;
+      const cardH = 6;
+      const spacing = 1;
+      let curX = 1;
+      let curY = 1;
+      postHooks.forEach((hook, index) => {
+        hook.style.display = "flex";
+        // 检查当前列是否在水平方向上与 NavPlate 重叠 (包含 1 个单元格的间距)
+        // 判定条件：卡片的右边界 + 1 > 导航条的左边界
+        const isXOverlap = curX + cardW + spacing > navX;
+
+        let maxY;
+        if (isXOverlap) {
+          // 如果水平重叠，y 轴必须在导航条上方，并留出 spacing 的距离
+          maxY = navY - cardH - spacing;
+        } else {
+          // 如果不重叠，y 轴可以用到板子底部
+          maxY = totalRows - cardH + 1;
+        }
+        // 如果当前 y 坐标超过了最大限制，或者当前列根本放不下一个卡片
+        if (curY > maxY || maxY < 1) {
+          curX += cardW + spacing; // 换到下一列
+          curY = 1; // 行坐标重置
+        }
+
+        // 设置坐标
+        hook.style.setProperty("--x", curX.toString());
+        hook.style.setProperty("--y", curY.toString());
+        hook.style.setProperty("--cols", cardW.toString());
+        hook.style.setProperty("--rows", cardH.toString());
+
+        // 移动 curY 到下一个可能的位置
+        curY += cardH + spacing;
+      });
     }
   }
 
