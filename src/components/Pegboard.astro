@@ -1,5 +1,5 @@
 ---
-
+//src/components/Pegboard.astro
 ---
 
 <div class="pegboard">
@@ -15,6 +15,10 @@
 
     width: 100%;
     max-width: 1200px;
+    height: auto;
+    overflow-y: auto;
+
+    background-attachment: local;
 
     background-image: radial-gradient(
       circle var(--hole-size) at center,
