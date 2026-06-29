@@ -256,36 +256,33 @@ const allTools = await getCollection("tools");
     });
 
     // 4. 布局 NavPlate 和 ToolHooks
-    if (navPlate) {
-      if (canFitSidePanel) {
-        // --- 右侧排列模式 ---
-        const sideX = usedWidthByCards + 1;
-        const navH = 1;
 
+    if (canFitSidePanel) {
+      // --- 右侧排列模式 ---
+      const sideX = usedWidthByCards + 1;
+      const navH = 1;
+
+      if (navPlate) {
         // NavPlate：与 PostHooks 下对齐 (y = lastY)
         navPlate.style.setProperty("--x", sideX.toString());
         navPlate.style.setProperty("--y", lastY.toString());
         navPlate.style.setProperty("--cols", sideW.toString());
         navPlate.style.setProperty("--rows", navH.toString());
+      }
+      // ToolHooks：从顶部开始排列，尝试填入右侧空间
+      const randomIndex = Math.floor(Math.random() * toolHooks.length);
+      const selectedTool = toolHooks[randomIndex] as HTMLElement;
 
-        // ToolHooks：从顶部开始排列，尝试填入右侧空间
-        const randomIndex = Math.floor(Math.random() * toolHooks.length);
-        const selectedTool = toolHooks[randomIndex] as HTMLElement;
-
-        const tW = parseInt(selectedTool.dataset.origCols || "4");
-        const tH = parseInt(selectedTool.dataset.origRows || "4");
-        console.log(
-          `Selected Tool Index: ${randomIndex}, tW: ${tW}, tH: ${tH}`,
-        );
-        selectedTool.style.display = "flex";
-        selectedTool.style.setProperty("--x", sideX.toString());
-        selectedTool.style.setProperty("--y", "1"); // 与 PostHooks 上对齐
-        selectedTool.style.setProperty(
-          "--cols",
-          Math.min(tW, sideW).toString(),
-        );
-        selectedTool.style.setProperty("--rows", tH.toString());
-      } else {
+      const tW = parseInt(selectedTool.dataset.origCols || "4");
+      const tH = parseInt(selectedTool.dataset.origRows || "4");
+      console.log(`Selected Tool Index: ${randomIndex}, tW: ${tW}, tH: ${tH}`);
+      selectedTool.style.display = "flex";
+      selectedTool.style.setProperty("--x", sideX.toString());
+      selectedTool.style.setProperty("--y", "1"); // 与 PostHooks 上对齐
+      selectedTool.style.setProperty("--cols", Math.min(tW, sideW).toString());
+      selectedTool.style.setProperty("--rows", tH.toString());
+    } else {
+      if (navPlate) {
         // --- 底部排列模式 (空间不足时) ---
         const navY = lastY + spacing + 1;
         if (volumeCount == 1) {
