@@ -105,16 +105,20 @@ const allTools = await getCollection("tools");
   }
 
   <!-- 分页条：放在网格底部，使用与 index.astro 一致的位置 -->
-  <NavPlate
-    x={1}
-    y={1}
-    cols={8}
-    rows={1}
-    class="nav-plate"
-    currentPage={page.currentPage}
-    totalPages={page.lastPage}
-    baseUrl="/posts"
-  />
+  {
+    page.lastPage > 1 && (
+      <NavPlate
+        x={1}
+        y={1}
+        cols={8}
+        rows={1}
+        class="nav-plate"
+        currentPage={page.currentPage}
+        totalPages={page.lastPage}
+        baseUrl="/posts"
+      />
+    )
+  }
 </Layout>
 
 <style>

@@ -28,7 +28,9 @@ const isLast = currentPage === totalPages;
 
 // 适配 GitHub Pages 路径
 const base = import.meta.env.BASE_URL.replace(/\/$/, "");
-const getUrl = (p: number) => (p === 1 ? `${base}/` : `${base}/posts/${p}`);
+const fullBaseUrl = `${base}${baseUrl}`;
+const getUrl = (p: number) =>
+  p === 1 ? `${fullBaseUrl}` : `${base}/posts/${p}`;
 
 const prevUrl = getUrl(currentPage - 1);
 const nextUrl = getUrl(currentPage + 1);
