@@ -288,9 +288,16 @@ const allTools = await getCollection("tools");
       } else {
         // --- 底部排列模式 (空间不足时) ---
         const navY = lastY + spacing + 1;
-        navPlate.style.setProperty("--x", "1");
+        if (volumeCount == 1) {
+          navPlate.style.setProperty("--cols", totalCols.toString());
+        } else {
+          navPlate.style.setProperty("--cols", cardW.toString());
+        }
+        navPlate.style.setProperty(
+          "--x",
+          ((volumeCount - 1) * (cardW + spacing) + 1).toString(),
+        );
         navPlate.style.setProperty("--y", navY.toString());
-        navPlate.style.setProperty("--cols", totalCols.toString());
         navPlate.style.setProperty("--rows", "1");
       }
     }
