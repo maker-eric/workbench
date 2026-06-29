@@ -7,7 +7,7 @@ interface Props {
 const { title, id } = Astro.props;
 ---
 
-<div class="card" transition:name={id}>
+<div class="card acrylic-panel" transition:name={id}>
   <header>{title}</header>
   <div class="content">
     <slot />
@@ -22,16 +22,6 @@ const { title, id } = Astro.props;
     display: flex;
     flex-direction: column;
     overflow: hidden;
-
-    /*background: rgba(255, 255, 255, 0.25); /* 白色半透明，0~1可调透明度 */
-    backdrop-filter: blur(5px); /* 背景模糊，数值越大越磨砂 */
-
-    border: 1px solid rgba(255, 255, 255, 0.4);
-    border-radius: 12px; /* 圆角是亚克力灵魂，不加很难有质感 */
-
-    box-shadow:
-      0 4px 16px rgba(0, 0, 0, 0.12),
-      inset 0 0 0 1px rgba(255, 255, 255, 0.15);
   }
   header {
     margin-top: 16px;

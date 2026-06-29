@@ -6,7 +6,7 @@ interface Props {
 const { label } = Astro.props;
 ---
 
-<div class="tool-wrapper">
+<div class="tool-wrapper acrylic-panel">
   <div class="tool-body">
     <slot />
   </div>
@@ -21,14 +21,7 @@ const { label } = Astro.props;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    backdrop-filter: blur(5px); /* 背景模糊，数值越大越磨砂 */
-    color: #0f0; /* 荧光绿 */
-    border: 1px solid rgba(255, 255, 255, 0.4);
-    border-radius: 12px; /* 圆角是亚克力灵魂，不加很难有质感 */
 
-    box-shadow:
-      0 4px 16px rgba(0, 0, 0, 0.12),
-      inset 0 0 0 1px rgba(255, 255, 255, 0.15);
     overflow: hidden;
   }
   .tool-body {
@@ -48,10 +41,6 @@ const { label } = Astro.props;
     color: white;
     font-size: 10px;
     width: 100%;
-    /* text-align: center; */
-    /* width: 100%;
-    align-self: stretch;
-    text-align: left; */
 
     text-indent: 8px;
 

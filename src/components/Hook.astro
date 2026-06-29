@@ -1,13 +1,32 @@
 ---
+// src/components/Hook.astro
 interface Props {
-  x: number; /* 起始列坐标 */
-  y: number; /* 起始行坐标 */
+  x?: number; /* 起始列坐标 */
+  y?: number; /* 起始行坐标 */
   cols?: number; /* 占用几列 */
   rows?: number; /* 占用几行 */
   class?: string; /* 可选的自定义类名 */
+  style?: string;
 }
 
-const { x, y, cols = 4, rows = 3, class: customClass } = Astro.props;
+const {
+  x,
+  y,
+  cols = 4,
+  rows = 3,
+  class: customClass,
+  style: incomingStyle = "",
+} = Astro.props;
+
+const combinedStyle = [
+  `--x: ${x}`,
+  `--y: ${y}`,
+  `--cols: ${cols}`,
+  `--rows: ${rows}`,
+  incomingStyle, // 插入外部传入的 style (如 "display: none;")
+]
+  .filter(Boolean)
+  .join("; ");
 ---
 
 <div
@@ -16,7 +35,7 @@ const { x, y, cols = 4, rows = 3, class: customClass } = Astro.props;
   data-orig-y={y}
   data-orig-cols={cols}
   data-orig-rows={rows}
-  style={`--x: ${x}; --y: ${y}; --cols: ${cols}; --rows: ${rows};`}
+  style={combinedStyle}
 >
   <div class="peg-pin"></div>
   <!-- 模拟固定钉子 -->
@@ -34,18 +53,5 @@ const { x, y, cols = 4, rows = 3, class: customClass } = Astro.props;
     /* padding-top: 10px; */
     box-sizing: border-box;
     margin-top: -6px;
-  }
-
-  .peg-pin {
-    position: absolute;
-    top: 0;
-    width: 12px;
-    height: 12px;
-    background: radial-gradient(circle at 30% 30%, #666, #111);
-    border-radius: 50%;
-    left: 50%;
-    transform: translate(-50%, 0%);
-    z-index: 20;
-    box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
   }
 </style>
