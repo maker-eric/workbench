@@ -85,8 +85,8 @@ const allTools = await getCollection("tools");
         WIDGET_MAP[tool.data.widgetType as keyof typeof WIDGET_MAP];
       return (
         <Hook
-          cols={tool.data.cols || 4}
-          rows={tool.data.rows || 4}
+          cols={tool.data.cols}
+          rows={tool.data.rows}
           class="tool-hook dynamic-tool"
           style="display: none;"
         >
@@ -158,7 +158,17 @@ const allTools = await getCollection("tools");
   .read-more:hover {
     text-decoration: underline;
   }
+  .widget-svg {
+    /* 核心属性：撑满父容器但保持比例 */
+    width: 100%;
+    height: 100%;
 
+    /* 关键属性：像背景图一样缩放，确保内容全部显示且不变形 */
+    object-fit: contain;
+
+    /* 增加一点点内边距，不让波形图贴死边框 */
+    padding: 10px;
+  }
   .post-meta-footer {
     margin-top: auto; /* 推到底部 */
     padding-top: 10px;
@@ -205,104 +215,92 @@ const allTools = await getCollection("tools");
     );
     console.log(`Current Grid Rows: ${totalRows}`);
 
-    const isTooSmall = totalCols < 13 || totalRows < 13;
     const toolHooks = document.querySelectorAll(
       ".tool-hook",
     ) as NodeListOf<HTMLElement>;
-
-    // toolHooks.forEach((hook) => {
-    //   hook.style.display = isTooSmall ? "none" : "flex";
-    // });
+    toolHooks.forEach((tool) => (tool.style.display = "none"));
 
     const postHooks = document.querySelectorAll(
       ".post-hook",
     ) as NodeListOf<HTMLElement>;
 
-    // --- 1. 先确定 NavPlate 的位置 ---
-    const navW = 8;
-    const navH = 1;
-    let navX, navY;
-
-    if (isTooSmall) {
-      navX = 1;
-      navY = totalRows - 1; // 移动端简单的底部
-    } else {
-      navX = totalCols - navW + 1;
-      navY = totalRows - navH + 1;
-    }
     const navPlate = document.querySelector(".nav-plate") as HTMLElement;
-    navPlate.style.setProperty("--x", navX.toString());
-    navPlate.style.setProperty("--y", navY.toString());
 
-    if (isTooSmall) {
-      // --- 精简模式逻辑 ---
-      postHooks.forEach((hook, index) => {
-        hook.style.display = "flex";
+    const cardW = 8;
+    const cardH = 6;
+    const spacing = 1;
+    let volumeCount = Math.floor(totalCols / (cardW + spacing));
+    if (volumeCount < 1) volumeCount = 1;
 
-        // 判断是纵向空间不足还是横向空间不足，决定是撑满宽还是撑满高
-        if (totalCols < 13) {
-          // 一列显示：宽度撑满，y 坐标顺排（防止重叠）
-          hook.style.setProperty("--x", "1"); // 居中显示
-          hook.style.setProperty("--cols", totalCols.toString());
-          hook.style.setProperty(
-            "--y",
-            (index * Math.floor(totalRows / 2) + 1).toString(),
-          );
-          hook.style.setProperty(
-            "--rows",
-            (Math.floor(totalRows / 2) - 1).toString(),
-          );
-        } else {
-          // 一行显示：高度撑满，x 坐标顺排
-          hook.style.setProperty("--y", "1");
-          hook.style.setProperty(
-            "--cols",
-            (Math.floor(totalCols / 2) - 1).toString(),
-          );
-          hook.style.setProperty("--rows", totalRows.toString());
-          // 假设每个精简文章占 6 列宽度
-          hook.style.setProperty(
-            "--x",
-            (index * Math.floor(totalCols / 2) + 1).toString(),
-          );
-        }
-        index++;
-      });
-    } else {
-      const cardW = 8;
-      const cardH = 6;
-      const spacing = 1;
-      let curX = 1;
-      let curY = 1;
-      postHooks.forEach((hook, index) => {
-        hook.style.display = "flex";
-        // 检查当前列是否在水平方向上与 NavPlate 重叠 (包含 1 个单元格的间距)
-        // 判定条件：卡片的右边界 + 1 > 导航条的左边界
-        const isXOverlap = curX + cardW + spacing > navX;
+    // 2. 检查右侧剩余空间
+    // 计算所有卡片占用的总宽度
+    const usedWidthByCards = volumeCount * (cardW + spacing);
+    const sideW = totalCols - usedWidthByCards; // 右侧剩余的空列数
 
-        let maxY;
-        if (isXOverlap) {
-          // 如果水平重叠，y 轴必须在导航条上方，并留出 spacing 的距离
-          maxY = navY - cardH - spacing;
-        } else {
-          // 如果不重叠，y 轴可以用到板子底部
-          maxY = totalRows - cardH + 1;
-        }
-        // 如果当前 y 坐标超过了最大限制，或者当前列根本放不下一个卡片
-        if (curY > maxY || maxY < 1) {
-          curX += cardW + spacing; // 换到下一列
-          curY = 1; // 行坐标重置
-        }
+    // 逻辑开关：是否可以在右侧放入工具和导航
+    const canFitSidePanel = volumeCount > 1 && sideW >= 3;
 
-        // 设置坐标
-        hook.style.setProperty("--x", curX.toString());
-        hook.style.setProperty("--y", curY.toString());
+    let lastY = 0;
+    postHooks.forEach((hook, index) => {
+      // 计算当前卡片所在的行列位置 (Row-major)
+      const colIdx = index % volumeCount;
+      const rowIdx = Math.floor(index / volumeCount);
+
+      // 计算坐标 (基于 1 开始的 grid 坐标)
+      const x = 1 + colIdx * (cardW + spacing);
+      const y = 1 + rowIdx * (cardH + spacing);
+
+      hook.style.setProperty("--x", x.toString());
+      hook.style.setProperty("--y", y.toString());
+      if (volumeCount == 1) {
+        hook.style.setProperty("--cols", totalCols.toString());
+      } else {
         hook.style.setProperty("--cols", cardW.toString());
-        hook.style.setProperty("--rows", cardH.toString());
+      }
+      hook.style.setProperty("--rows", cardH.toString());
 
-        // 移动 curY 到下一个可能的位置
-        curY += cardH + spacing;
-      });
+      // 记录最下方的 y 坐标
+      lastY = Math.max(lastY, y + cardH - 1);
+    });
+
+    // 4. 布局 NavPlate 和 ToolHooks
+    if (navPlate) {
+      if (canFitSidePanel) {
+        // --- 右侧排列模式 ---
+        const sideX = usedWidthByCards + 1;
+        const navH = 1;
+
+        // NavPlate：与 PostHooks 下对齐 (y = lastY)
+        navPlate.style.setProperty("--x", sideX.toString());
+        navPlate.style.setProperty("--y", lastY.toString());
+        navPlate.style.setProperty("--cols", sideW.toString());
+        navPlate.style.setProperty("--rows", navH.toString());
+
+        // ToolHooks：从顶部开始排列，尝试填入右侧空间
+        const randomIndex = Math.floor(Math.random() * toolHooks.length);
+        const selectedTool = toolHooks[randomIndex] as HTMLElement;
+
+        const tW = parseInt(selectedTool.dataset.origCols || "4");
+        const tH = parseInt(selectedTool.dataset.origRows || "4");
+        console.log(
+          `Selected Tool Index: ${randomIndex}, tW: ${tW}, tH: ${tH}`,
+        );
+        selectedTool.style.display = "flex";
+        selectedTool.style.setProperty("--x", sideX.toString());
+        selectedTool.style.setProperty("--y", "1"); // 与 PostHooks 上对齐
+        selectedTool.style.setProperty(
+          "--cols",
+          Math.min(tW, sideW).toString(),
+        );
+        selectedTool.style.setProperty("--rows", tH.toString());
+      } else {
+        // --- 底部排列模式 (空间不足时) ---
+        const navY = lastY + spacing + 1;
+        navPlate.style.setProperty("--x", "1");
+        navPlate.style.setProperty("--y", navY.toString());
+        navPlate.style.setProperty("--cols", totalCols.toString());
+        navPlate.style.setProperty("--rows", "1");
+      }
     }
   }
 
