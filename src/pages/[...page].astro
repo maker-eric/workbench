@@ -1,15 +1,15 @@
 ---
 // src/pages/posts/[...page].astro
 import { getCollection } from "astro:content";
-import Layout from "../../layouts/Layout.astro";
-import Hook from "../../components/Hook.astro";
-import Card from "../../components/Card.astro";
-import Tool from "../../components/Tool.astro";
-import NavPlate from "../../components/NavPlate.astro";
+import Layout from "../layouts/Layout.astro";
+import Hook from "../components/Hook.astro";
+import Card from "../components/Card.astro";
+import Tool from "../components/Tool.astro";
+import NavPlate from "../components/NavPlate.astro";
 import type { GetStaticPaths, Page } from "astro";
 import type { CollectionEntry } from "astro:content";
 
-import "../../styles/common.css";
+import "../styles/common.css";
 
 interface Props {
   page: Page<CollectionEntry<"posts">>; // 显式声明 page 的类型
@@ -30,10 +30,10 @@ export const getStaticPaths: GetStaticPaths = async ({ paginate }) => {
 
 const { page } = Astro.props;
 
-import pidTuner from "../../assets/pid-tuner.svg";
-import arthorizon from "../../assets/artificial-horizon.svg";
-import caliper from "../../assets/caliper.png";
-import calculator from "../../assets/calculator.svg";
+import pidTuner from "../assets/pid-tuner.svg";
+import arthorizon from "../assets/artificial-horizon.svg";
+import caliper from "../assets/caliper.png";
+import calculator from "../assets/calculator.svg";
 
 const WIDGET_MAP = {
   pid: { src: pidTuner.src, alt: "PID Tuner" },
@@ -115,7 +115,7 @@ const allTools = await getCollection("tools");
         class="nav-plate"
         currentPage={page.currentPage}
         totalPages={page.lastPage}
-        baseUrl="/posts"
+        baseUrl=""
       />
     )
   }

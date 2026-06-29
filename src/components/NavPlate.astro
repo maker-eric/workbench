@@ -29,8 +29,14 @@ const isLast = currentPage === totalPages;
 // 适配 GitHub Pages 路径
 const base = import.meta.env.BASE_URL.replace(/\/$/, "");
 const fullBaseUrl = `${base}${baseUrl}`;
-const getUrl = (p: number) =>
-  p === 1 ? `${fullBaseUrl}` : `${base}/posts/${p}`;
+const getUrl = (p: number) => {
+  if (p === 1) {
+    // 第一页永远是根目录 (考虑到 GitHub Pages 的 base 路径)
+    return base === "" ? "/" : `${base}/`;
+  }
+  // 其他页码为 /2, /3 等
+  return `${base}/${p}`;
+};
 
 const prevUrl = getUrl(currentPage - 1);
 const nextUrl = getUrl(currentPage + 1);
