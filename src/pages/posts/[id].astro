@@ -26,8 +26,8 @@ const { Content } = await render(post);
       <Card title={post.data.title} id={post.id}>
         <article class="prose">
           <Content />
+          <Comments />
         </article>
-        <Comments />
         <div class="footer-actions">
           <a href="#" onclick="history.back(); return false;">← BACK TO BOARD</a
           >
