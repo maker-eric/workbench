@@ -1,0 +1,95 @@
+---
+import { getEntry, render } from "astro:content";
+import Layout from "../layouts/Layout.astro";
+import Card from "../components/Card.astro";
+import Comments from "../components/Comments.astro";
+
+// 获取 backlog.md 的内容
+const entry = await getEntry("posts", "backlog");
+
+// 如果没找到文件，可以做个防御处理
+if (!entry) {
+  return Astro.redirect("/404");
+}
+
+const { Content } = await render(entry);
+const base = import.meta.env.BASE_URL.replace(/\/$/, "");
+---
+
+<Layout title="System Backlog | Maker Grid">
+  <div class="detail-hook">
+    <div class="giant-card-container">
+      <Card title="DEVELOPMENT BACKLOG" id="backlog">
+        <div class="backlog-header">
+          <p class="status-code">STATUS: ACTIVE_MAINTENANCE</p>
+          <p class="description">
+            以下是目前正在排队的硬件/软件需求。欢迎在下方留言提交你的建议。
+          </p>
+        </div>
+        <article class="prose">
+          <Content />
+        </article>
+
+        <!-- 独立的评论区，作为需求投递箱 -->
+        <div class="suggestion-box">
+          <Comments />
+        </div>
+
+        <div class="footer-actions">
+          <a href={`${base}/`} class="back-link">← RETURN TO SYSTEM</a>
+        </div>
+      </Card>
+    </div>
+  </div>
+</Layout>
+
+<style>
+  .detail-hook {
+    /* 控制放大后卡片的大小 */
+    position: absolute;
+    top: 0px;
+    left: var(--gap);
+    right: var(--gap);
+    bottom: var(--gap);
+    z-index: 100;
+    max-width: 1200px;
+    display: flex;
+    justify-content: center;
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .footer-actions {
+    margin-top: auto;
+    padding-top: 20px;
+    border-top: 1px dashed rgba(0, 0, 0, 0.1);
+  }
+
+  .footer-actions a {
+    color: var(--accent);
+    text-decoration: none;
+    font-size: 12px;
+    font-weight: bold;
+    display: inline-block;
+    padding: 5px 10px;
+    border: 1px solid var(--accent);
+    border-radius: 4px;
+  }
+
+  .giant-card-container {
+    width: 100%;
+    max-width: 1000px;
+    height: 100%; /* 撑满 detail-hook */
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* 针对文章内容的样式微调 */
+  .prose {
+    line-height: 1.6;
+    flex: 1;
+    overflow-y: auto;
+    padding-right: 10px; /* 给滚动条留点空间 */
+    min-height: 0;
+  }
+</style>
