@@ -3,6 +3,7 @@
 import { getCollection, render } from "astro:content";
 import Layout from "../../layouts/Layout.astro";
 import Card from "../../components/Card.astro";
+import Comments from "../../components/Comments.astro";
 
 export async function getStaticPaths() {
   const posts = await getCollection("posts");
@@ -26,7 +27,7 @@ const { Content } = await render(post);
         <article class="prose">
           <Content />
         </article>
-
+        <Comments />
         <div class="footer-actions">
           <a href="#" onclick="history.back(); return false;">← BACK TO BOARD</a
           >
@@ -40,7 +41,7 @@ const { Content } = await render(post);
   .detail-hook {
     /* 控制放大后卡片的大小 */
     position: absolute;
-    top: var(--gap);
+    top: 0px;
     left: var(--gap);
     right: var(--gap);
     bottom: var(--gap);
