@@ -1,0 +1,66 @@
+---
+// src/components/Comments.astro
+---
+
+<section class="comments-container">
+  <hr class="comment-divider" />
+  <div id="giscus-container"></div>
+</section>
+
+<script>
+  function loadGiscus() {
+    const container = document.getElementById("giscus-container");
+    if (!container) return;
+
+    // 清空现有内容（防止 View Transitions 导致重复渲染）
+    container.innerHTML = "";
+
+    const script = document.createElement("script");
+    script.src = "https://giscus.app/client.js";
+    script.setAttribute("data-repo", "maker-eric/workbench");
+    script.setAttribute("data-repo-id", "R_kgDOTBnEGA");
+    script.setAttribute("data-category", "Announcements");
+    script.setAttribute("data-category-id", "posts");
+    script.setAttribute("data-mapping", "pathname");
+    script.setAttribute("data-strict", "0");
+    script.setAttribute("data-reactions-enabled", "0");
+    script.setAttribute("data-emit-metadata", "0");
+    script.setAttribute("data-input-position", "bottom");
+    script.setAttribute("data-theme", "light"); // 或者根据你的钉板色调选 dark
+    script.setAttribute("data-lang", "zh-CN");
+    script.setAttribute("data-loading", "lazy");
+    script.setAttribute("crossorigin", "anonymous");
+    script.async = true;
+
+    container.appendChild(script);
+  }
+
+  // 监听 Astro 页面加载（兼容 View Transitions）
+  document.addEventListener("astro:page-load", loadGiscus);
+</script>
+
+<style>
+  .comments-section {
+    margin-top: 3rem;
+    width: 100%;
+  }
+
+  /* 统一 Markdown 风格的分隔线 */
+  .comment-divider {
+    border: 0;
+    border-top: 1px solid #eee;
+    margin-bottom: 2rem;
+  }
+
+  /* 这里的样式主要用于适配内容宽度，保持与 prose 一致 */
+  #giscus-container {
+    width: 100%;
+    /* 避免评论区太窄 */
+    min-height: 150px;
+  }
+
+  /* 让 Giscus 内部的字体尽量接近你的 Markdown 字体 */
+  :global(.giscus-frame) {
+    border-radius: 8px;
+  }
+</style>

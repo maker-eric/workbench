@@ -1,0 +1,30 @@
+---
+// src/components/GoogleAnalytics.astro
+const GA_MEASUREMENT_ID = import.meta.env.PUBLIC_GAID;
+---
+
+<!-- 全局网站代码 (gtag.js) -->
+<script
+  is:inline
+  async
+  src={`https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`}
+></script>
+
+<script is:inline define:vars={{ GA_MEASUREMENT_ID }}>
+  window.dataLayer = window.dataLayer || [];
+  function gtag() {
+    dataLayer.push(arguments);
+  }
+
+  // 1. 初始化 GA
+  gtag("js", new Date());
+  gtag("config", GA_MEASUREMENT_ID);
+
+  // 2. 适配 Astro View Transitions (ClientRouter)
+  // 每次页面切换完成时发送一个 page_view 事件
+  document.addEventListener("astro:page-load", () => {
+    gtag("config", GA_MEASUREMENT_ID, {
+      page_path: window.location.pathname,
+    });
+  });
+</script>
