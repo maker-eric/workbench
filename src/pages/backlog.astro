@@ -5,7 +5,7 @@ import Card from "../components/Card.astro";
 import Comments from "../components/Comments.astro";
 
 // 获取 backlog.md 的内容
-const entry = await getEntry("posts", "backlog");
+const entry = await getEntry("pages", "backlog");
 
 // 如果没找到文件，可以做个防御处理
 if (!entry) {

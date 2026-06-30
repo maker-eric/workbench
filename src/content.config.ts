@@ -26,7 +26,15 @@ const toolsCollection = defineCollection({
   }),
 });
 
+const pagesCollection = defineCollection({
+  loader: glob({ pattern: "**/[^_]*.md", base: "./src/content/pages" }),
+  schema: z.object({
+    title: z.string(),    
+  }),
+});
+
 export const collections = {
   'posts': postsCollection,
   'tools': toolsCollection, 
+  'pages': pagesCollection
 };
