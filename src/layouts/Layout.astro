@@ -1,11 +1,12 @@
 ---
 // src/layouts/Layout.astro
+import GoogleAnalytics from "../components/GoogleAnalytics.astro";
+import { ClientRouter } from "astro:transitions";
+import Pegboard from "../components/Pegboard.astro";
 interface Props {
   title?: string;
 }
 const { title = "Maker's Pegboard" } = Astro.props;
-import { ClientRouter } from "astro:transitions";
-import Pegboard from "../components/Pegboard.astro";
 const base = import.meta.env.BASE_URL.replace(/\/$/, "");
 const pegboardUrl = base || "/";
 const backlogUrl = `${base}/backlog`;
@@ -27,6 +28,7 @@ const isPegboard =
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{title}</title>
+    <GoogleAnalytics />
     <ClientRouter />
   </head>
   <body>
