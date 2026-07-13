@@ -44,14 +44,12 @@ categories: [技术工具]
 如图所示，将 STM32 与 AT24C64 (EEPROM) 模块连接。注意：**VCC 请务必接 3.3V**，并确保 SDA/SCL 已接入上拉电阻。
 
 ![STM32与AT24CXX EEPROM接线图](images/nexus/wiring_diagram.png)
-_(注：请在保存时将此链接替换为你 GitHub 仓库中的图片路径)_
 
 #### 2. 引脚定义图 (STM32CubeMX)
 
 本固件深度优化了 STM32F103C8T6 的硬件 I2C1 接口（PB6/PB7）：
 
 ![STM32F103C8T6 I2C引脚定义图](images/nexus/pinout_diagram.png)
-_(注：请在保存时将此链接替换为你 GitHub 仓库中的图片路径)_
 
 | I2C 信号 | STM32 引脚 | 备注                         |
 | :------- | :--------- | :--------------------------- |
