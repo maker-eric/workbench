@@ -20,6 +20,12 @@ categories: [技术工具]
 
 ---
 
+### 📺 演示视频 (Demo Video)
+
+![演示动图](images/nexus/demo.gif "播放")
+
+---
+
 ### 🚀 核心卖点 (Key Features)
 
 - **零代码调试**：支持通过串口发送 `[` (Start)、`]` (Stop)、`0xXX` (数据) 等逻辑指令，实时操控总线。
@@ -70,7 +76,7 @@ _(注：请在保存时将此链接替换为你 GitHub 仓库中的图片路径)
 ### 📦 立即获取
 
 **固件购买：**
-👉 [GitHub 仓库 - Nexus-Link V1.0](https://m.tb.cn/h.8ZQmQeR?tk=9YGfgKsLALx)
+👉 [Nexus-Link V1.0](https://m.tb.cn/h.8ZQmQeR?tk=9YGfgKsLALx)
 
 ---
 
