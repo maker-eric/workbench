@@ -43,7 +43,7 @@ categories: [技术工具]
 
 如图所示，将 STM32 与 AT24C64 (EEPROM) 模块连接。注意：**VCC 请务必接 3.3V**，并确保 SDA/SCL 已接入上拉电阻。
 
-![STM32与AT24CXX EEPROM接线图](images/nexus/wiring_diagram.png)
+![STM32与AT24CXX EEPROM接线图](images/nexus/wiring_diagram.jpg)
 
 #### 2. 引脚定义图 (STM32CubeMX)
 
