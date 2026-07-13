@@ -45,7 +45,11 @@ const allTools = await getCollection("tools");
 const base = import.meta.env.BASE_URL.replace(/\/$/, "");
 ---
 
-<Layout title="Pegboard Posts">
+<Layout
+  title="Pegboard Posts"
+  description="Browse Maker's Pegboard posts, experiments, and notes in a compact industrial-style dashboard."
+  canonical="/"
+>
   <!-- 这里的 class 应该和你 index.astro 里的主容器一致 -->
   {
     page.data.map((post, index) => {

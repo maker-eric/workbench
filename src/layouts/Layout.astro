@@ -1,12 +1,27 @@
 ---
 // src/layouts/Layout.astro
 import GoogleAnalytics from "../components/GoogleAnalytics.astro";
+import SeoHead from "../components/SeoHead.astro";
 import { ClientRouter } from "astro:transitions";
 import Pegboard from "../components/Pegboard.astro";
 interface Props {
   title?: string;
+  description?: string;
+  image?: string;
+  canonical?: string;
+  type?: string;
+  articleDate?: string;
+  noindex?: boolean;
 }
-const { title = "Maker's Pegboard" } = Astro.props;
+const {
+  title = "Maker's Pegboard",
+  description,
+  image,
+  canonical,
+  type,
+  articleDate,
+  noindex,
+} = Astro.props;
 const base = import.meta.env.BASE_URL.replace(/\/$/, "");
 const pegboardUrl = base || "/";
 const backlogUrl = `${base}/backlog`;
@@ -25,9 +40,15 @@ const isPegboard =
 <!doctype html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>{title}</title>
+    <SeoHead
+      title={title}
+      description={description}
+      image={image}
+      canonical={canonical}
+      type={type}
+      articleDate={articleDate}
+      noindex={noindex}
+    />
     <GoogleAnalytics />
     <ClientRouter />
   </head>
