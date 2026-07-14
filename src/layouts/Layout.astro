@@ -22,9 +22,9 @@ const {
   articleDate,
   noindex,
 } = Astro.props;
-const base = import.meta.env.BASE_URL.replace(/\/$/, "");
+const base = import.meta.env.BASE_URL;
 const pegboardUrl = base || "/";
-const backlogUrl = `${base}/backlog`;
+const backlogUrl = `${base}backlog`;
 
 const pathname = Astro.url.pathname;
 const normalizedPath = pathname.replace(/\/$/, "");
