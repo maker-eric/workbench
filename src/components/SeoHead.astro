@@ -1,0 +1,48 @@
+---
+interface Props {
+  title?: string;
+  description?: string;
+  image?: string;
+  canonical?: string;
+  type?: string;
+  articleDate?: string;
+  noindex?: boolean;
+}
+
+const {
+  title = "Maker's Pegboard",
+  description = "A compact personal workspace for notes, tools, and experiments built with Astro.",
+  image = "/favicon.svg",
+  canonical,
+  type = "website",
+  articleDate,
+  noindex = false,
+} = Astro.props;
+---
+
+<!-- Global Metadata -->
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+<!-- Canonical URL: 告诉搜索引擎哪个是原始链接，防止重复内容降权 -->
+<link rel="canonical" href={canonical} />
+
+<!-- Primary Meta Tags -->
+<title>{title}</title>
+<meta name="title" content={title} />
+<meta name="description" content={description} />
+
+<!-- Open Graph / Facebook (社交媒体分享展示) -->
+<meta property="og:type" content={type} />
+<meta property="og:url" content={Astro.url} />
+<meta property="og:title" content={title} />
+<meta property="og:description" content={description} />
+<meta property="og:image" content={new URL(image, Astro.url)} />
+
+<!-- Twitter -->
+<meta property="twitter:card" content="summary_large_image" />
+<meta property="twitter:url" content={Astro.url} />
+<meta property="twitter:title" content={title} />
+<meta property="twitter:description" content={description} />
+<meta property="twitter:image" content={new URL(image, Astro.url)} />
