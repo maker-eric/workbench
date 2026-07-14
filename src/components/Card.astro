@@ -7,12 +7,12 @@ interface Props {
 const { title, id } = Astro.props;
 ---
 
-<div class="card acrylic-panel" transition:name={id}>
-  <header>{title}</header>
+<article class="card acrylic-panel" transition:name={id}>
+  <h2>{title}</h2>
   <div class="content">
     <slot />
   </div>
-</div>
+</article>
 
 <style>
   .card {
@@ -23,8 +23,9 @@ const { title, id } = Astro.props;
     flex-direction: column;
     overflow: hidden;
   }
-  header {
+  h2 {
     margin-top: 16px;
+    margin-bottom: 0px;
     background: var(--accent);
     color: var(--tag);
     /* color: var(--accent); */
